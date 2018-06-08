@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "AdminDashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AdminDashBoard</h2>
+
+
+<div class="col-lg-12"></div>

@@ -1,0 +1,92 @@
+﻿@using System.Web.Optimization;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PreIRMA</title>
+    @Styles.Render("~/Content/Bootstrap/bootstrap.min.css")
+    @Styles.Render("~/Content/themes/base/jquery-ui.css")
+    @Styles.Render("~/Content/kendo/kendo.common.min.css")
+    @Styles.Render("~/Content/kendo/kendo.default.min.css")
+    @Styles.Render("~/Content/kendo/kendo.dataviz.min.css")
+    @Styles.Render("~/Content/kendo/kendo.dataviz.default.min.css")
+    @Styles.Render("~/Content/Rat/font-awesome.min.css")
+    @*@Styles.Render("~/Content/Rat/Custom.css")*@
+
+    @Styles.Render("~/Content/Rat/rat.css")
+    @Styles.Render("~/Content/Rat/animate.css")
+    @Styles.Render("~/Content/Rat/helper.css")
+    @Styles.Render("~/Content/Rat/waves-effect.css")
+
+    @Scripts.Render("~/Scripts/jquery-1.11.1.min.js")
+    @Scripts.Render("~/Scripts/jquery-migrate-1.2.1.js")
+    @Scripts.Render("~/Scripts/Kendo/kendo.all.min.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    @Scripts.Render("~/Scripts/jquery.tmpl.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/jquery-ui-1.10.3.custom.min.js")
+    @Scripts.Render("~/Scripts/jquery.infinitescroll.min.js")
+    @Scripts.Render("~/Scripts/Rat/Html2Canvas.js")
+    @Scripts.Render("~/Scripts/Rat/Rat.js")
+
+    @Scripts.Render("~/Scripts/Rat/waves.js")
+
+</head>
+<body class="fixed-left loginBg">
+    <div class="container-fluid">
+
+        <div class="col-lg-6 col-md-6 col-sm-6 hidden-xs">
+            <div class="alert alert-remove" id="idErrorMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none"></div>
+            <div class="alert alert-ok" id="idSuccesMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none"></div>
+            @{
+                <div class="alert alert-remove" id="divErrorMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none; background: #e33915; color: #fff; min-width: 20%;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-times fa-stack-1x fa-inverse" style="color: #e33915;"></i>
+                    </span>
+                    <span id="spanErrorMessage">
+                        @if (@TempData["errorMessage"] != null)
+                        {
+                            @TempData["errorMessage"]
+                        }
+                    </span>
+                </div>                          
+                            
+                <div class="alert alert-ok" id="divSuccesMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none; background: #008000; color: #fff; min-width: 20%;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-check fa-stack-1x fa-inverse" style="color: #008000;"></i>
+                    </span>
+                    <span id="spanSuccesMessage">
+                        @if (@TempData["successMessage"] != null)
+                        {
+                            @TempData["successMessage"]
+                        }
+                    </span>
+                </div>
+            }
+        </div>
+        <div class="row">
+            @RenderBody()
+            @RenderSection("scripts", required: false)
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <p class="text-center" style="color: #fff;">&copy; @DateTime.Now.Year Intelligent Risk Monitoring Assessment. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        if ($('#spanSuccesMessage').text().trim() != '') {
+            $("#divSuccesMessage").show();
+            $('#divSuccesMessage').delay(4000).fadeOut('slow');
+        }
+        if ($('#spanErrorMessage').text().trim() != '') {
+            $("#divErrorMessage").show();
+            $('#divErrorMessage').delay(4000).fadeOut('slow');
+        }
+    });
+</script>

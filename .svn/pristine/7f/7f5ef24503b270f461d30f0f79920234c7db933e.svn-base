@@ -1,0 +1,2192 @@
+﻿@using PreIRMA.DataContract;
+@{
+    ViewBag.Title = "ViewSDVDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DCUsers objDCUsers = (DCUsers)Session["UserLogon"];
+}
+
+@using (Html.BeginForm("AddUpdateSDVDetails", "SDVDetails", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddUpdateSDV" }))
+{
+    <div class="panel panel-default m-t-20" style="padding-top: 10px;" id="divAddSdnDetails">
+        <div class="panel-heading" style="float: left; width: 100%;">
+            <h3 class="panel-title col-md-11">SDV Details>> View</h3>
+            @*<button type="button" id="btnAddSDNDeatils" class="btn btn-info btn-sm" style="display: none;">Add SDV</button>*@
+        </div>
+        <div class="form-group col-md-12" style="padding-top: 15px;">
+            <label class="control-label col-md-3" style="padding-top: 6px;">Assessment Types :</label>
+            <div class="col-md-7">
+                <select id="ddlAssessmentType" name="ddlAssessmentType" required data-required-msg="Please select Assessment Type" class="fullWidth"></select>
+            </div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <label class="control-label col-md-3" style="padding-top: 6px;">Sections :</label>
+            <div class="col-md-7">
+                <select id="ddlSections" name="ddlSections" required data-required-msg="Please select section" class="fullWidth"></select>
+            </div>
+        </div>
+
+        <div class="panel-body" style="padding-bottom: 50px; float: left; width: 100%; text-align: center;">
+            @*<div id="divGrid"></div>*@
+            <button type="button" id="viewSdvDetails" class="btn btn-info btn-lg" style="width: 30%; display: none;">View SDV</button>
+            <button type="button" id="btnAddSDNDeatils" class="btn btn-info btn-lg" style="width: 30%; display: none;">Add SDV</button>
+        </div>
+    </div>
+    <!--Risk 0 Questions grid-->
+
+    <!--Main Modal Start-->
+    <div id="addSDNDeatilsModal" class="modal" role="dialog">
+        <input type="hidden" id="hdnSDVDetails_0_Id" name="hdnSDVDetails_0_Id" />
+        <input type="hidden" id="hdnSDVDetails_1_Id" name="hdnSDVDetails_1_Id" />
+        <input type="hidden" id="hdnSDVDetails_2_Id" name="hdnSDVDetails_2_Id" />
+        <input type="hidden" id="hdnSDVDetails_3_Id" name="hdnSDVDetails_3_Id" />
+        <input type="hidden" id="hdnSDVDetails_4_Id" name="hdnSDVDetails_4_Id" />
+        <input type="hidden" id="hdnSDVDetails_5_Id" name="hdnSDVDetails_5_Id" />
+        <input type="hidden" id="hdnSDVDetails_6_Id" name="hdnSDVDetails_6_Id" />
+        <input type="hidden" id="hdnSDVDetails_7_Id" name="hdnSDVDetails_7_Id" />
+        <input type="hidden" id="hdnSDVDetails_8_Id" name="hdnSDVDetails_8_Id" />
+        <input type="hidden" id="hdnSDVDetails_9_Id" name="hdnSDVDetails_9_Id" />
+
+        <input type="hidden" id="hdnSectionId" name="hdnSectionId" />
+        <input type="hidden" id="hdnRisk_0_ScoreId" name="hdnRisk_0_ScoreId" />
+        <input type="hidden" id="hdnRisk_1_ScoreId" name="hdnRisk_1_ScoreId" />
+        <input type="hidden" id="hdnRisk_2_ScoreId" name="hdnRisk_2_ScoreId" />
+        <input type="hidden" id="hdnRisk_3_ScoreId" name="hdnRisk_3_ScoreId" />
+        <input type="hidden" id="hdnRisk_4_ScoreId" name="hdnRisk_4_ScoreId" />
+        <input type="hidden" id="hdnRisk_5_ScoreId" name="hdnRisk_5_ScoreId" />
+        <input type="hidden" id="hdnRisk_6_ScoreId" name="hdnRisk_6_ScoreId" />
+        <input type="hidden" id="hdnRisk_7_ScoreId" name="hdnRisk_7_ScoreId" />
+        <input type="hidden" id="hdnRisk_8_ScoreId" name="hdnRisk_8_ScoreId" />
+        <input type="hidden" id="hdnRisk_9_ScoreId" name="hdnRisk_9_ScoreId" />
+
+
+        <!--Main Modal content-->
+        <div class="modal-dialog modal-lg" style="width: 95%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="mainModalClose close">&times;</button>
+                    <h4 class="modal-title">Add SDV Details</h4>
+                </div>
+                <div class="modal-body col-md-12">
+                    <div id="divFirst">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-3">Assessment Type :</label>
+                            <div class="col-md-2">
+                                <label id="lblAssessmentType"></label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-3">Section :</label>
+                            <div class="col-md-7">
+                                @*<select id="ddlSections" name="ddlSections" class="fullWidth" required data-required-msg="Please select section"></select>*@
+                                <label id="lblSection"></label>
+                            </div>
+                        </div>
+
+                        @*<div class="form-group col-md-12">
+                            <label class="control-label col-md-3" style="padding-top: 6px;">Assessment Topic :</label>
+                            <div class="col-md-7">
+                                <input type="text" name="txtWAC" id="txtWAC" class="form-control" required data-required-msg="Please enter assessment topic" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-3" style="padding-top: 15px;">Assessment Topic Item: </label>
+                            <div class="col-md-7">
+                                <textarea name="txtDocReview" id="txtDocReview" class="form-control" required data-required-msg="Please enter assessment topic item"></textarea>
+                            </div>
+                        </div>*@
+                    </div>
+                    <div id="divSecond">
+                        <div>
+                            <div class="col-md-12">
+                                <!--Risk level 0 data-->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Risk Score 0</label>
+                                        </div>
+                                    </div>
+
+                                    @* <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk0MAT" name="ddlRisk0MAT" class="form-control" required data-required-msg="Please select mat"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk0SDRSDV" name="ddlRisk0SDRSDV" class="form-control" required data-required-msg="Please select sdv"></select>
+                                    </div>
+                                </div>*@
+                                    <div>
+                                        <input type="hidden" name="hdn_risk0_QustIds[]" id="hdn_risk0_QustIds" />
+                                        <label id="lblrisk0Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk0QuestionNos"></label>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="btnRisk0Questions" name="btnRisk0Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Risk level 1 data-->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Risk Score 1</label>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk1MAT" name="ddlRisk1MAT" class="form-control" required data-required-msg="Please select mat"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk1SDRSDV" name="ddlRisk1SDRSDV" class="form-control" required data-required-msg="Please select sdv"></select>
+                                    </div>
+                                </div>*@
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk1_QustIds[]" id="hdn_risk1_QustIds" />
+                                        <label id="lblrisk1Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk1QuestionNos"></label>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+
+                                        <div class="col-md-12">
+                                            <button id="btnRisk1Questions" name="btnRisk1Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                            @* <select id="ddlRisk1Questions" name="ddlRisk1Questions[]" data-placeholder="Select questions"></select>*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Risk level 2 data-->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Risk Score 2</label>
+                                        </div>
+                                    </div>
+
+                                    @*                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk2MAT" name="ddlRisk2MAT" class="form-control" required data-required-msg="Please select mat"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk2SDRSDV" name="ddlRisk2SDRSDV" class="form-control" required data-required-msg="Please select sdv"></select>
+                                    </div>
+                                </div>*@
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk2_QustIds[]" id="hdn_risk2_QustIds" />
+                                        <label id="lblrisk2Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk2QuestionNos"></label>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+
+                                        <div class="col-md-12">
+                                            <button id="btnRisk2Questions" name="btnRisk2Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                            @*  <select id="ddlRisk2Questions" name="ddlRisk2Questions[]" data-placeholder="Select questions"></select>*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Risk level 3 data-->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Risk Score 3</label>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk3MAT" name="ddlRisk3MAT" class="form-control" required data-required-msg="Please select mat"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk3SDRSDV" name="ddlRisk3SDRSDV" class="form-control" required data-required-msg="Please select sdv"></select>
+                                    </div>
+                                </div>*@
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk3_QustIds[]" id="hdn_risk3_QustIds" />
+                                        <label id="lblrisk3Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk3QuestionNos"></label>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+
+                                        <div class="col-md-12">
+                                            <button id="btnRisk3Questions" name="btnRisk3Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                            @* <select id="ddlRisk3Questions" name="ddlRisk3Questions[]" data-placeholder="Select questions"></select>*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Risk level 4 data-->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Risk Score 4</label>
+                                        </div>
+                                    </div>
+
+                                    @* <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk4MAT" name="ddlRisk4MAT" class="form-control" required data-required-msg="Please select mat"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk4SDRSDV" name="ddlRisk4SDRSDV" class="form-control" required data-required-msg="Please select sdv"></select>
+                                    </div>
+                                </div>*@
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk4_QustIds[]" id="hdn_risk4_QustIds" />
+                                        <label id="lblrisk4Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk4QuestionNos"></label>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+
+                                        <div class="col-md-12">
+                                            <button id="btnRisk4Questions" name="btnRisk4Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                            @* <select id="ddlRisk4Questions" name="ddlRisk4Questions[]" data-placeholder="Select questions"></select>*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Risk level 5 data-->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Risk Score 5</label>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk5MAT" name="ddlRisk5MAT" class="form-control" required data-required-msg="Please select mat"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-7">
+                                        <select id="ddlRisk5SDRSDV" name="ddlRisk5SDRSDV" class="form-control" required data-required-msg="Please select sdv"></select>
+                                    </div>
+                                </div>*@
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk5_QustIds[]" id="hdn_risk5_QustIds" />
+                                        <label id="lblrisk5Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk5QuestionNos"></label>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+
+                                        <div class="col-md-12">
+                                            <button id="btnRisk5Questions" name="btnRisk5Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                            @* <select id="ddlRisk5Questions" name="ddlRisk5Questions[]" data-placeholder="Select questions"></select>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- New sdv-->
+                            <div class="col-md-12">
+                                <!-- First visit -->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">First Visit</label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk6_QustIds[]" id="hdn_risk6_QustIds" />
+                                        <label id="lblrisk6Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk6QuestionNos"></label>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="btnRisk6Questions" name="btnRisk6Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Last visit -->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">Last Visit</label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk7_QustIds[]" id="hdn_risk7_QustIds" />
+                                        <label id="lblrisk7Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk7QuestionNos"></label>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="btnRisk7Questions" name="btnRisk7Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- QUA -->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">QUA</label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk8_QustIds[]" id="hdn_risk8_QustIds" />
+                                        <label id="lblrisk8Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk8QuestionNos"></label>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="btnRisk8Questions" name="btnRisk8Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- QOV -->
+                                <div class="col-md-2" style="padding-top: 50px;">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <label class="col-md-12">QOV</label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <input type="hidden" name="hdn_risk9_QustIds[]" id="hdn_risk9_QustIds" />
+                                        <label id="lblrisk9Questions" style="display: none">Question No.s:</label>
+                                        <label id="lblrisk9QuestionNos"></label>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="btnRisk9Questions" name="btnRisk9Questions" class="btn btn-info btn-sm">Select Questions</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" name="btnMainModalSave" id="btnMainModalSave" style="text-align: center">Save</button>
+                    <button type="button" class="btn btn-default mainModalClose" id="btnMainModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!--Question Modal for Risk 0 Start-->
+        <div id="risk0QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk0QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk0QustsSave" id="btnRisk0QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Risk 0 End-->
+
+        <!--Question Modal for Risk 1 Start-->
+        <div id="risk1QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk1QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk1QustsSave" id="btnRisk1QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Risk 1 End-->
+
+        <!--Question Modal for Risk 2 Start-->
+        <div id="risk2QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk2QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk2QustsSave" id="btnRisk2QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Risk 2 End-->
+
+        <!--Question Modal for Risk 3 Start-->
+        <div id="risk3QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk3QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk3QustsSave" id="btnRisk3QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Risk 3 End-->
+
+        <!--Question Modal for Risk 4 Start-->
+        <div id="risk4QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk4QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk4QustsSave" id="btnRisk4QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Risk 4 End-->
+
+        <!--Question Modal for Risk 5 Start-->
+        <div id="risk5QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk5QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk5QustsSave" id="btnRisk5QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Risk 5 End-->
+
+        <!--Question Modal for new sdv Start-->
+        <!--Question Modal for First Visit Start-->
+        <div id="risk6QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk6QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk6QustsSave" id="btnRisk6QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for First Visit Start-->
+
+        <!--Question Modal for Last visit Start-->
+        <div id="risk7QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk7QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk7QustsSave" id="btnRisk7QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for Last visit End-->
+
+        <!--Question Modal for QUA Start-->
+        <div id="risk8QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk8QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk8QustsSave" id="btnRisk8QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for QUA End-->
+
+        <!--Question Modal for QOV Start-->
+        <div id="risk9QustsPopup" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 75%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close QustsClose">&times;</button>
+                        <h4 class="modal-title">Select Questions</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div id="divRisk9QuestionsGrid"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" name="btnRisk9QustsSave" id="btnRisk9QustsSave" style="text-align: center">Save</button>
+                        <button type="button" class="btn btn-default QustsClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Question Modal for QOV End-->
+
+    </div>
+    <!--Main Modal End-->    
+}
+
+<script>
+    //07/11/2017 Modified by Madan START
+    var risk0QuestionIds = [];
+    var risk0QuestionNos = [];
+    var risk1QuestionIds = [];
+    var risk1QuestionNos = [];
+    var risk2QuestionIds = [];
+    var risk2QuestionNos = [];
+    var risk3QuestionIds = [];
+    var risk3QuestionNos = [];
+    var risk4QuestionIds = [];
+    var risk4QuestionNos = [];
+    var risk5QuestionIds = [];
+    var risk5QuestionNos = [];
+    //07/11/2017 Modified by Madan END
+    //3/22/2018 start
+    var risk6QuestionIds = [];
+    var risk6QuestionNos = [];
+    var risk7QuestionIds = [];
+    var risk7QuestionNos = [];
+    var risk8QuestionIds = [];
+    var risk8QuestionNos = [];
+    var risk9QuestionIds = [];
+    var risk9QuestionNos = [];
+    //3/22/2018 end
+    function GetUserAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetUserAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetAdminAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetAdminAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    if ("@objDCUsers.UserType" == "A") {
+        var data = GetAdminAssessmentTypes();
+    }
+    else {
+        var data = GetUserAssessmentTypes();
+    }
+
+    function GetSections(AssessmentTypeId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSections", "Sections")',
+            data: { strAssessmentTypeId: AssessmentTypeId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetQuestionsBySectionId(SectionId) {
+        var result = [];
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetQuestionsBySectionId", "Questions")',
+            data: { SectionId: SectionId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    // This function is used to get SDV Questions based on SDV Details Id
+    function GetSDVQuesBySDVDetailsId(RiskScoreId, RefKey) {
+        var result = [];
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSDVQuestionsBySDVDetailsId", "SDVDetails")',
+            data: { RiskScoreId: RiskScoreId, RefKey: RefKey },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+    var vDdlAssessmentTypess = $("#ddlAssessmentType").kendoDropDownList({
+        dataSource: data,
+        dataValueField: "AssessmentTpyeId",
+        dataTextField: "AssessmentType",
+        index: 0,
+        optionLabel: "--Select Assessment Types --",
+    }).data("kendoDropDownList");
+
+    $("#ddlSections").kendoDropDownList();
+    $("#ddlAssessmentType").change(function () {       
+        //Sections DropDownList
+        $("#ddlSections").kendoDropDownList({
+            dataSource: GetSections($(this).val()),
+            dataValueField: "SectionId",
+            dataTextField: "SectionName",
+            index: 0,
+            optionLabel: "--Select Sections--"
+        }).data("kendoDropDownList");        
+        
+
+        if ($("#ddlSections").val() == null || $("#ddlSections").val() == "") {
+            $("#viewSdvDetails").hide();
+            $("#btnAddSDNDeatils").hide();
+        }
+    });
+
+   
+    var vSelectedSectionId = 0;
+    var vSelectedRefKey = 0;
+    $("#ddlSections").change(function () {
+        if ($("#ddlSections").val() != ""){
+            var data = GetSDV_Sections($("#ddlAssessmentType").val(), $("#ddlSections").val());
+            if (data.length != 0) {
+                vSelectedSectionId = data[0].SectionId;
+                vSelectedRefKey = data[0].RefKey;
+                $("#btnAddSDNDeatils").hide();
+                $("#viewSdvDetails").show();
+            }
+            else {
+                $("#btnAddSDNDeatils").show();
+                $("#viewSdvDetails").hide();
+            }
+        }
+        else{
+            $("#viewSdvDetails").hide();
+            $("#btnAddSDNDeatils").hide();
+        }
+    });
+
+    $('#viewSdvDetails').on('click', function () {
+        GetDetails(vSelectedSectionId, vSelectedRefKey);
+    });
+
+    //Binding SDV Details Grid.
+    //if (data.length > 0) {
+    //    $("#divGrid").show();
+    //    $('#divGrid').kendoGrid({
+    //        dataSource: data,
+    //        serverPaging: false,
+    //        serverFiltering: false,
+    //        serverSorting: false,
+    //        sortable: true,
+    //        scrollable: false,
+    //        pageable: {
+    //            pageSize: 10,
+    //            refresh: false,
+    //            pageSizes: true,
+    //            buttonCount: 5
+    //        },
+    //        filterable: true,
+    //        columns:
+    //         [
+    //         {
+    //             field: "SectionId",
+    //             hidden: true
+    //         },
+    //         {
+    //             field: "SectionNumber",
+    //             title: "Section Number",
+    //             width: 200
+    //         },
+    //         {
+    //             field: "SectionName",
+    //             title: "Section Name",
+    //             width: 300
+    //         },
+    //         //{
+    //         //    field: "AssessmentTopic",
+    //         //    title: "Assessment Topic",
+    //         //    width: 300
+    //         //},
+    //         //{
+    //         //    field: "AssessmentTopicItem",
+    //         //    title: "Assessment Topic Item",
+    //         //    width: 300
+    //         //},
+    //         {
+    //             template: "<div style='position: relative;left: 9px;'><a onClick='GetDetails(#=SectionId#,#=RefKey#)' style='cursor:pointer;'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Get Details'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;</a><a onclick='DeleteSDVDetails(#=RefKey#)' style='cursor:pointer;' ><i class='fa fa-trash-o' aria-hidden='true' title='Delete'></i></a></div>",
+    //             title: "Action",
+    //             width: 100
+    //         }
+    //         ]
+    //    });
+    //}
+    //else {
+    //    $("#divGrid").hide();
+    //}
+    //});
+
+    //Edit SDV Details.Here we are getting values based on SectionId.
+    function GetDetails(SectionId, RefKey) {
+        $("#addSDNDeatilsModal").modal('show');
+        for (var k = 0; k <= 9; k++) {
+            var lblIds = "#lblrisk" + k + "QuestionNos";
+            $(lblIds).html("");            
+            $("#lblrisk" + k + "Questions").hide();
+            var btnIds = "#btnRisk" + k + "Questions";           
+            $(btnIds).val("");
+            $("#hdnSDVDetails_" + k + "_Id").val("");
+            $("#lblrisk" + k + "QuestionNos").text("");            
+            $("#hdn_risk" + k + "_QustIds").val(""); 
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSDVDetails", "SDVDetails")',
+            data: { strSectionId: SectionId, strRefKey: RefKey },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;                
+                $("#lblSection").text(data[0].SectionName);
+                $("#hdnSectionId").val(data[0].SectionId);
+                $("#ddlAssessmentType").data("kendoDropDownList").value(data[0].AssessmentTypeId);
+                $("#lblAssessmentType").text(data[0].AssessmentType);
+
+                //$("#txtWAC").val(data[0].WAC);
+                //$("#txtDocReview").val(data[0].DOCReview);
+                for (var k = 0; k <= 9; k++) {
+                    $("#hdnRisk_" + k + "_ScoreId").val("");
+                }
+                risk0QuestionIds = [];
+                risk0QuestionNos = [];
+                risk1QuestionIds = [];
+                risk1QuestionNos = [];
+                risk2QuestionIds = [];
+                risk2QuestionNos = [];
+                risk3QuestionIds = [];
+                risk3QuestionNos = [];
+                risk4QuestionIds = [];
+                risk4QuestionNos = [];
+                risk5QuestionIds = [];
+                risk5QuestionNos = [];
+                //07/11/2017 Modified by Madan END
+                //3/22/2018 start
+                risk6QuestionIds = [];
+                risk6QuestionNos = [];
+                risk7QuestionIds = [];
+                risk7QuestionNos = [];
+                risk8QuestionIds = [];
+                risk8QuestionNos = [];
+                risk9QuestionIds = [];
+                risk9QuestionNos = [];
+                for (var i = 0; i < data.length; i++) {
+                    //var matId = "#ddlRisk" + i + "MAT";
+                    //$(matId).data("kendoDropDownList").value(data[i].MAT);
+
+                    //var sdvId = "#ddlRisk" + i + "SDRSDV";
+                    //$(sdvId).data("kendoDropDownList").value(data[i].SDV);
+
+                    var SDVDetailsId = "#hdnSDVDetails_" + data[i].RiskSerialId + "_Id";
+
+                    $(SDVDetailsId).val(data[i].SDVDetailsId);
+
+                    $("#btnRisk" + data[i].RiskSerialId + "Questions").val(data[i].SDVDetailsId);
+
+                    lblIds = "#lblrisk" + data[i].RiskSerialId + "QuestionNos";
+                    var lblNos = "#lblrisk" + data[i].RiskSerialId + "Questions";
+
+                    var lblRiskScoreIds = "#hdnRisk_" + data[i].RiskSerialId + "_ScoreId";
+                    $(lblRiskScoreIds).val(data[i].RiskScoreId);
+
+
+                    var hdnRiskScoreQustIds = "#hdn_risk" + data[i].RiskSerialId + "_QustIds";
+
+                    var riskQuestionIds = [];
+
+                    //Call Get SDV Question based on SDV DetailsId
+                    var questionIds = GetSDVQuesBySDVDetailsId(data[i].RiskScoreId, data[i].RefKey);
+                    for (var j = 0; j < questionIds.length; j++) {
+                        riskQuestionIds.push(questionIds[j].QuestionId);
+                        $(lblIds).append(questionIds[j].QuestionNumber + ","); //We keep QuestionNumbers here
+                        $(lblNos).show(); //This line for Question No.s: label text
+                        $(hdnRiskScoreQustIds).val(riskQuestionIds);
+
+                        switch (data[i].RiskSerialId) {
+                            case 0:
+                                risk0QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 1:
+                                risk1QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 2:
+                                risk2QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 3:
+                                risk3QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 4:
+                                risk4QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 5:
+                                risk5QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 6:
+                                risk6QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 7:
+                                risk7QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 8:
+                                risk8QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                            case 9:
+                                risk9QuestionIds.push("" + questionIds[j].QuestionId + "");
+                                break;
+                        }
+
+                    }
+                }
+
+            }
+        });
+        return result;
+    }
+
+    function GetSDV_Sections(AssessmentTypeId, SectionId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSDV_Sections", "SDVDetails")',
+            data: { strAssessmentTypeId: AssessmentTypeId, strSectionId: SectionId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+
+    function DeleteSDVDetails(RefKey) {
+        if (RefKey != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/SDVDetails/DeleteSDVDetails?RefKey=" + RefKey;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetSDV_Sections($("#ddlAssessmentType").val(), $("#ddlSections").val());
+                        $('#divGrid').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $("#idSDV").addClass('active');
+
+        var FirstValidator = $("#divFirst").kendoValidator().data("kendoValidator");
+        var SecondValidator = $("#divSecond").kendoValidator({
+
+        }).data("kendoValidator");
+
+        $("#btnMainModalSave").click(function () {
+            if (!FirstValidator.validate()) {
+                return false;
+            }
+
+            if (!SecondValidator.validate()) {
+                return false;
+            }
+            else {
+                if ($("#hdn_risk0_QustIds").val() != "" || $("#hdn_risk1_QustIds").val() != "" || $("#hdn_risk2_QustIds").val() != "" || $("#hdn_risk3_QustIds").val() != "" || $("#hdn_risk4_QustIds").val() != ""
+                   || $("#hdn_risk5_QustIds").val() != "" || $("#hdn_risk6_QustIds").val() != "" || $("#hdn_risk7_QustIds").val() != "" || $("#hdn_risk8_QustIds").val() != "" || $("#hdn_risk9_QustIds").val() != "")
+                    $("#frmAddUpdateSDV").submit();
+            }
+        });
+        //Main Modal open and Add SDV Details Click function 
+        Divvalidator = $("#divAddSdnDetails").kendoValidator().data("kendoValidator");
+        $("#btnAddSDNDeatils").click(function () {
+            $("#ddlAssessmentType").attr("required", "required")
+            $("#ddlSections").attr("required", "required");
+            if (Divvalidator.validate()) {
+
+                $("#lblAssessmentType").text($("#ddlAssessmentType").data('kendoDropDownList').text());
+                $("#lblSection").text($("#ddlSections").data('kendoDropDownList').text());
+                $("#hdnSectionId").val($("#ddlSections").val());
+
+                $("#addSDNDeatilsModal").modal('show');
+                // $("#ddlSections").data("kendoDropDownList").enable(true);
+                $("#txtWAC").val("");
+                $("#txtDocReview").val("");
+
+                for (i = 0; i <= 9; i++) {
+                    var btnIds = "#btnRisk" + i + "Questions";
+                    //var matIds = "#ddlRisk" + i + "MAT";
+                    //var SDRSDVIds = "#ddlRisk" + i + "SDRSDV";
+                    //$(matIds).data("kendoDropDownList").value("");
+                    //$(SDRSDVIds).data("kendoDropDownList").value("");
+                    $(btnIds).val("");
+                    $("#hdnRisk_" + i + "_ScoreId").val("");
+                    $("#hdnSDVDetails_" + i + "_Id").val("");
+                    $("#lblrisk" + i + "QuestionNos").text("");
+                    $("#lblrisk" + i + "Questions").hide();
+                    $("#hdn_risk" + i + "_QustIds").val("");
+                    //$("#cheRisk" + i + "_QustIds").val("");
+                    $("#cheRisk" + i + "_QustIds").removeAttr("checked");                    
+                }
+                risk0QuestionIds = [];
+                risk0QuestionNos = [];
+                risk1QuestionIds = [];
+                risk1QuestionNos = [];
+                risk2QuestionIds = [];
+                risk2QuestionNos = [];
+                risk3QuestionIds = [];
+                risk3QuestionNos = [];
+                risk4QuestionIds = [];
+                risk4QuestionNos = [];
+                risk5QuestionIds = [];
+                risk5QuestionNos = [];
+                //07/11/2017 Modified by Madan END
+                //3/22/2018 start
+                risk6QuestionIds = [];
+                risk6QuestionNos = [];
+                risk7QuestionIds = [];
+                risk7QuestionNos = [];
+                risk8QuestionIds = [];
+                risk8QuestionNos = [];
+                risk9QuestionIds = [];
+                risk9QuestionNos = [];
+            }
+        });
+
+        //Main Modal close click
+        $(".mainModalClose").click(function () {
+            $("#addSDNDeatilsModal").modal('hide');
+        });
+
+        //Questions Modal Close
+        $(".QustsClose").click(function () {
+            $("#risk0QustsPopup").modal('hide');
+            $("#risk1QustsPopup").modal('hide');
+            $("#risk2QustsPopup").modal('hide');
+            $("#risk3QustsPopup").modal('hide');
+            $("#risk4QustsPopup").modal('hide');
+            $("#risk5QustsPopup").modal('hide');
+            $("#risk6QustsPopup").modal('hide');
+            $("#risk7QustsPopup").modal('hide');
+            $("#risk8QustsPopup").modal('hide');
+            $("#risk9QustsPopup").modal('hide');
+        });
+
+        $("#btnRisk0QustsSave").click(function (e) {
+            e.preventDefault();
+            //07/11/2017 Modified by Madan START
+            risk0QuestionNos = [];
+            risk0QuestionIds = [];
+            //07/11/2017 Modified by Madan END
+            $.each($("input[id='cheRisk0_QustIds']:checked"), function () {
+                risk0QuestionNos.push($(this).val());
+                risk0QuestionIds.push($(this).attr('data-risk0-id'));
+            });
+            if (risk0QuestionNos.length > 0) {
+                $("#lblrisk0Questions").show();
+                $("#hdnRisk_0_ScoreId").val(0);
+            }
+            else {
+                $("#lblrisk0Questions").hide();
+                $("#hdnRisk_0_ScoreId").val("");
+            }
+            $("#hdn_risk0_QustIds").val(risk0QuestionIds);
+            $("#lblrisk0QuestionNos").text(risk0QuestionNos);               
+            $("#risk0QustsPopup").modal('hide');  
+        });
+
+        $("#btnRisk1QustsSave").click(function (e) {
+            e.preventDefault();
+            risk1QuestionNos = [];
+            risk1QuestionIds = [];
+            $.each($("input[id='cheRisk1_QustIds']:checked"), function () {
+                risk1QuestionNos.push($(this).val());
+                risk1QuestionIds.push($(this).attr('data-risk1-id'));
+            });
+            if (risk1QuestionIds.length > 0) {
+                $("#lblrisk1Questions").show();
+                $("#hdnRisk_1_ScoreId").val(1);
+            }
+            else {
+                $("#lblrisk1Questions").hide();
+                $("#hdnRisk_1_ScoreId").val("");
+            }
+            $("#hdn_risk1_QustIds").val(risk1QuestionIds);
+            $("#lblrisk1QuestionNos").text(risk1QuestionNos);               
+            $("#risk1QustsPopup").modal('hide');
+        });
+
+        $("#btnRisk2QustsSave").click(function (e) {
+            e.preventDefault();
+            risk2QuestionNos = [];
+            risk2QuestionIds = [];
+            $.each($("input[id='cheRisk2_QustIds']:checked"), function () {
+                risk2QuestionNos.push($(this).val());
+                risk2QuestionIds.push($(this).attr('data-risk2-id'));
+            });
+            if (risk2QuestionIds.length > 0) {
+                $("#lblrisk2Questions").show();
+                $("#hdnRisk_2_ScoreId").val(2);
+            }
+            else {
+                $("#lblrisk2Questions").hide();
+                $("#hdnRisk_2_ScoreId").val("");
+            }
+            $("#hdn_risk2_QustIds").val(risk2QuestionIds);
+            $("#lblrisk2QuestionNos").text(risk2QuestionNos);                
+            $("#risk2QustsPopup").modal('hide');                
+        });
+
+        $("#btnRisk3QustsSave").click(function (e) {
+            e.preventDefault();
+            risk3QuestionNos = [];
+            risk3QuestionIds = [];
+            $.each($("input[id='cheRisk3_QustIds']:checked"), function () {
+                risk3QuestionNos.push($(this).val());
+                risk3QuestionIds.push($(this).attr('data-risk3-id'));
+            });
+            if (risk3QuestionIds.length > 0) {
+                $("#lblrisk3Questions").show();
+                $("#hdnRisk_3_ScoreId").val(3);
+            }
+            else {
+                $("#lblrisk3Questions").hide();
+                $("#hdnRisk_3_ScoreId").val("");
+            }
+            $("#hdn_risk3_QustIds").val(risk3QuestionIds);
+            $("#lblrisk3QuestionNos").text(risk3QuestionNos);               
+            $("#risk3QustsPopup").modal('hide');                      
+        });
+
+        $("#btnRisk4QustsSave").click(function (e) {
+            e.preventDefault();
+            risk4QuestionNos = [];
+            risk4QuestionIds = [];
+            $.each($("input[id='cheRisk4_QustIds']:checked"), function () {
+                risk4QuestionNos.push($(this).val());
+                risk4QuestionIds.push($(this).attr('data-risk4-id'));
+            });
+            if (risk4QuestionIds.length > 0) {
+                $("#lblrisk4Questions").show();
+                $("#hdnRisk_4_ScoreId").val(4);
+            }
+            else {
+                $("#lblrisk4Questions").hide();
+                $("#hdnRisk_4_ScoreId").val("");
+            }
+            $("#hdn_risk4_QustIds").val(risk4QuestionIds);
+            $("#lblrisk4QuestionNos").text(risk4QuestionNos);                
+            $("#risk4QustsPopup").modal('hide');                 
+        });
+
+        $("#btnRisk5QustsSave").click(function (e) {
+            e.preventDefault();
+            risk5QuestionNos = [];
+            risk5QuestionIds = [];
+            $.each($("input[id='cheRisk5_QustIds']:checked"), function () {
+                risk5QuestionNos.push($(this).val());
+                risk5QuestionIds.push($(this).attr('data-risk5-id'));
+            });
+            if (risk5QuestionIds.length > 0) {
+                $("#lblrisk5Questions").show();
+                $("#hdnRisk_5_ScoreId").val(5);
+            }
+            else {
+                $("#lblrisk5Questions").hide();
+                $("#hdnRisk_5_ScoreId").val("");
+            }
+            $("#hdn_risk5_QustIds").val(risk5QuestionIds);
+            $("#lblrisk5QuestionNos").text(risk5QuestionNos);               
+            $("#risk5QustsPopup").modal('hide');            
+        });
+
+        //22-03-2018
+        //First visit
+        $("#btnRisk6QustsSave").click(function (e) {
+            e.preventDefault();
+            //07/11/2017 Modified by Madan START
+            risk6QuestionNos = [];
+            risk6QuestionIds = [];
+            //07/11/2017 Modified by Madan END
+            $.each($("input[id='cheRisk6_QustIds']:checked"), function () {
+                risk6QuestionNos.push($(this).val());
+                risk6QuestionIds.push($(this).attr('data-risk6-id'));
+            });
+            if (risk6QuestionNos.length > 0) {
+                $("#lblrisk6Questions").show();
+                $("#hdnRisk_6_ScoreId").val("First Visit");
+            }
+            else {
+                $("#lblrisk6Questions").hide();
+                $("#hdnRisk_6_ScoreId").val("");
+            }
+            $("#hdn_risk6_QustIds").val(risk6QuestionIds);
+            $("#lblrisk6QuestionNos").text(risk6QuestionNos);               
+            $("#risk6QustsPopup").modal('hide');            
+        });
+
+        //Last visit
+        $("#btnRisk7QustsSave").click(function (e) {
+            e.preventDefault();
+            //07/11/2017 Modified by Madan START
+            risk7QuestionNos = [];
+            risk7QuestionIds = [];
+            //07/11/2017 Modified by Madan END
+            $.each($("input[id='cheRisk7_QustIds']:checked"), function () {
+                risk7QuestionNos.push($(this).val());
+                risk7QuestionIds.push($(this).attr('data-risk7-id'));
+            });
+            if (risk7QuestionNos.length > 0) {
+                $("#lblrisk7Questions").show();
+                $("#hdnRisk_7_ScoreId").val("Last Visit");
+            }
+            else {
+                $("#lblrisk7Questions").hide();
+                $("#hdnRisk_7_ScoreId").val("");
+            }
+            $("#hdn_risk7_QustIds").val(risk7QuestionIds);
+            $("#lblrisk7QuestionNos").text(risk7QuestionNos);               
+            $("#risk7QustsPopup").modal('hide');           
+        });
+
+        //QUA
+        $("#btnRisk8QustsSave").click(function (e) {
+            e.preventDefault();
+            //07/11/2017 Modified by Madan START
+            risk8QuestionNos = [];
+            risk8QuestionIds = [];
+            //07/11/2017 Modified by Madan END
+            $.each($("input[id='cheRisk8_QustIds']:checked"), function () {
+                risk8QuestionNos.push($(this).val());
+                risk8QuestionIds.push($(this).attr('data-risk8-id'));
+            });
+            if (risk8QuestionNos.length > 0) {
+                $("#lblrisk8Questions").show();
+                $("#hdnRisk_8_ScoreId").val("QUA");
+            }
+            else {
+                $("#lblrisk8Questions").hide();
+                $("#hdnRisk_8_ScoreId").val("");
+            }
+            $("#hdn_risk8_QustIds").val(risk8QuestionIds);
+            $("#lblrisk8QuestionNos").text(risk8QuestionNos);                
+            $("#risk8QustsPopup").modal('hide');           
+        });
+
+        //QOV
+        $("#btnRisk9QustsSave").click(function (e) {
+            e.preventDefault();
+            //07/11/2017 Modified by Madan START
+            risk9QuestionNos = [];
+            risk9QuestionIds = [];
+            //07/11/2017 Modified by Madan END
+            $.each($("input[id='cheRisk9_QustIds']:checked"), function () {
+                risk9QuestionNos.push($(this).val());
+                risk9QuestionIds.push($(this).attr('data-risk9-id'));
+            });
+            if (risk9QuestionNos.length > 0) {
+                $("#lblrisk9Questions").show();
+                $("#hdnRisk_9_ScoreId").val("QOV");
+            }
+            else {
+                $("#lblrisk9Questions").hide();
+                $("#hdnRisk_9_ScoreId").val("");
+            }
+            $("#hdn_risk9_QustIds").val(risk9QuestionIds);
+            $("#lblrisk9QuestionNos").text(risk9QuestionNos);                
+            $("#risk9QustsPopup").modal('hide');
+           
+        });
+
+        //Risk Score 0 data
+        //var matDropDownData = [
+        //        { MATId: "1", MATText: "OnSite" },
+        //        { MATId: "2", MATText: "Remote" }]
+
+        //$("#ddlRisk0MAT").kendoDropDownList({
+        //    dataSource: matDropDownData,
+        //    dataValueField: "MATId",
+        //    dataTextField: "MATText",
+        //    optionLabel: "--Select MAT--"
+        //}).data("kendoDropDownList");
+
+
+        //var SDVDropDownData = [
+        //        { SDRSDVId: "1", SDRSDVText: "100%" },
+        //        { SDRSDVId: "2", SDRSDVText: "PNR" },
+        //        { SDRSDVId: "3", SDRSDVText: "QUA" }
+        //]
+        //$("#ddlRisk0SDRSDV").kendoDropDownList({
+        //    dataSource: SDVDropDownData,
+        //    dataValueField: "SDRSDVId",
+        //    dataTextField: "SDRSDVText",
+        //    optionLabel: "--Select SDV--"
+        //}).data("kendoDropDownList");
+
+        //Risk 0 Questions Grid
+        $("#btnRisk0Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk0QustsPopup").modal('show');
+                $('#divRisk0QuestionsGrid').show();
+
+                var Risk0QuestionsGrid = $('#divRisk0QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk0_QustIds"  data-risk0-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk0_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor0_#=QuestionId#' class='questionEditor0'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor0").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor0').data().kendoEditor.body).attr('contenteditable', false);
+
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk0QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk0-id");
+                            var index = risk0QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor0_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+
+                    }
+                });
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //Risk Score 1 data
+
+        //$("#ddlRisk1MAT").kendoDropDownList({
+        //    dataSource: matDropDownData,
+        //    dataValueField: "MATId",
+        //    dataTextField: "MATText",
+        //    optionLabel: "--Select MAT--"
+        //}).data("kendoDropDownList");
+
+        //$("#ddlRisk1SDRSDV").kendoDropDownList({
+        //    dataSource: SDVDropDownData,
+        //    dataValueField: "SDRSDVId",
+        //    dataTextField: "SDRSDVText",
+        //    optionLabel: "--Select SDV--"
+        //}).data("kendoDropDownList");
+
+        //Risk 1 Questions Grid
+        $("#btnRisk1Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk1QustsPopup").modal('show');
+                $('#divRisk1QuestionsGrid').show();
+                var Risk1QuestionsGrid = $('#divRisk1QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk1_QustIds"  data-risk1-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk1_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor1_#=QuestionId#' class='questionEditor1'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor1").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor1').data().kendoEditor.body).attr('contenteditable', false);
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk1QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk1-id");                           
+                            var index = risk1QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor1_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+                    }
+                });
+
+                //if ($(this).val() != '') {
+                //var vSDVQuestionData = GetSDVQuesBySDVDetailsId(1, $("#hdnSDVDetails_0_Id").val());
+                //$.each($("input[id='cheRisk1_QustIds']"), function () {
+                //    var gridCellValue = $(this).attr('data-risk1-id');
+                //    for (i = 0; i < vSDVQuestionData.length; i++) {
+                //        if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //            $("input[data-risk1-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //        }
+                //    }
+                //});
+                // }
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //Risk Score 2 data 
+        //$("#ddlRisk2MAT").kendoDropDownList({
+        //    dataSource: matDropDownData,
+        //    dataValueField: "MATId",
+        //    dataTextField: "MATText",
+        //    optionLabel: "--Select MAT--"
+        //}).data("kendoDropDownList");
+
+        //$("#ddlRisk2SDRSDV").kendoDropDownList({
+        //    dataSource: SDVDropDownData,
+        //    dataValueField: "SDRSDVId",
+        //    dataTextField: "SDRSDVText",
+        //    optionLabel: "--Select SDV--"
+        //}).data("kendoDropDownList");
+
+        //Risk 2 Questions Grid
+        $("#btnRisk2Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk2QustsPopup").modal('show');
+                $('#divRisk2QuestionsGrid').show();
+                var Risk2QuestionsGrid = $('#divRisk2QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk2_QustIds" data-risk2-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk2_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor2_#=QuestionId#' class='questionEditor2'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor2").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor2').data().kendoEditor.body).attr('contenteditable', false);
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk2QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk2-id");
+                            var index = risk2QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor2_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+                    }
+                });
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId(2, $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk2_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk2-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk2-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //Risk Score 3 data
+
+        //$("#ddlRisk3MAT").kendoDropDownList({
+        //    dataSource: matDropDownData,
+        //    dataValueField: "MATId",
+        //    dataTextField: "MATText",
+        //    optionLabel: "--Select MAT--"
+        //}).data("kendoDropDownList");
+
+        //$("#ddlRisk3SDRSDV").kendoDropDownList({
+        //    dataSource: SDVDropDownData,
+        //    dataValueField: "SDRSDVId",
+        //    dataTextField: "SDRSDVText",
+        //    optionLabel: "--Select SDV--"
+        //}).data("kendoDropDownList");
+
+        //Risk 3 Questions Grid
+        $("#btnRisk3Questions").click(function (e) {
+            e.preventDefault();
+
+            if ($("#ddlSections").val() != '') {
+                $("#risk3QustsPopup").modal('show');
+                $('#divRisk3QuestionsGrid').show();
+                var Risk3QuestionsGrid = $('#divRisk3QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk3_QustIds" data-risk3-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk3_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor3_#=QuestionId#' class='questionEditor3'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor3").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk3QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk3-id");
+                            var index = risk3QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor3').data().kendoEditor.body).attr('contenteditable', false);
+
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor3_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+                    }
+                });
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId(3, $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk3_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk3-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk3-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //Risk Score 4 data
+        //$("#ddlRisk4MAT").kendoDropDownList({
+        //    dataSource: matDropDownData,
+        //    dataValueField: "MATId",
+        //    dataTextField: "MATText",
+        //    optionLabel: "--Select MAT--"
+        //}).data("kendoDropDownList");
+
+
+        //$("#ddlRisk4SDRSDV").kendoDropDownList({
+        //    dataSource: SDVDropDownData,
+        //    dataValueField: "SDRSDVId",
+        //    dataTextField: "SDRSDVText",
+        //    optionLabel: "--Select SDV--"
+        //}).data("kendoDropDownList");
+
+        //Risk 4 Questions Grid
+        $("#btnRisk4Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk4QustsPopup").modal('show');
+                $('#divRisk4QuestionsGrid').show();
+                var Risk4QuestionsGrid = $('#divRisk4QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk4_QustIds" data-risk4-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk4_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                   {
+                       field: "QuestionNumber",
+                       title: "Question No",
+                       width: 100
+                   },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor4_#=QuestionId#' class='questionEditor4'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor4").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk4QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk4-id");
+                            var index = risk4QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor4').data().kendoEditor.body).attr('contenteditable', false);
+
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor4_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+                    }
+                });
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId(4, $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk4_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk4-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk4-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //Risk Score 5 data
+        //$("#ddlRisk5MAT").kendoDropDownList({
+        //    dataSource: matDropDownData,
+        //    dataValueField: "MATId",
+        //    dataTextField: "MATText",
+        //    optionLabel: "--Select MAT--"
+        //}).data("kendoDropDownList");
+
+        //$("#ddlRisk5SDRSDV").kendoDropDownList({
+        //    dataSource: SDVDropDownData,
+        //    dataValueField: "SDRSDVId",
+        //    dataTextField: "SDRSDVText",
+        //    optionLabel: "--Select SDV--"
+        //}).data("kendoDropDownList");
+
+        //Risk 5 Questions Grid
+        $("#btnRisk5Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk5QustsPopup").modal('show');
+                $('#divRisk5QuestionsGrid').show();
+                var Risk5QuestionsGrid = $('#divRisk5QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk5_QustIds" data-risk5-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk5_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor5_#=QuestionId#' class='questionEditor5'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor5").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk5QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk5-id");
+                            var index = risk5QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor5').data().kendoEditor.body).attr('contenteditable', false);
+
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor5_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+                    }
+                });
+
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId(5, $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk5_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk5-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk5-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //New sdv Questions
+
+        //First Visit Questions Grid
+        $("#btnRisk6Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk6QustsPopup").modal('show');
+                $('#divRisk6QuestionsGrid').show();
+
+                var Risk6QuestionsGrid = $('#divRisk6QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk6_QustIds"  data-risk6-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk6_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor6_#=QuestionId#' class='questionEditor6'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor6").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+
+
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk6QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk6-id");
+                            var index = risk6QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor6').data().kendoEditor.body).attr('contenteditable', false);
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor6_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+
+                    }
+                });
+
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId('First Visit', $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk6_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk6-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk6-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //Last Visit Questions Grid
+        $("#btnRisk7Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk7QustsPopup").modal('show');
+                $('#divRisk7QuestionsGrid').show();
+
+                var Risk7QuestionsGrid = $('#divRisk7QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk7_QustIds"  data-risk7-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk7_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor7_#=QuestionId#' class='questionEditor7'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor7").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+
+
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk7QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk7-id");
+                            var index = risk7QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor7').data().kendoEditor.body).attr('contenteditable', false);
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor7_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+
+                    }
+                });
+
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId('Last Visit', $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk7_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk7-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk7-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //QUA Questions Grid
+        $("#btnRisk8Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk8QustsPopup").modal('show');
+                $('#divRisk8QuestionsGrid').show();
+
+                var Risk8QuestionsGrid = $('#divRisk8QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk8_QustIds"  data-risk8-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk8_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor8_#=QuestionId#' class='questionEditor8'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor8").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+
+
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk8QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk8-id");
+                            var index = risk8QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor8').data().kendoEditor.body).attr('contenteditable', false);
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor8_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+
+                    }
+                });
+
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId('QUA', $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk8_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk8-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk8-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+
+        //QOA Questions Grid
+        $("#btnRisk9Questions").click(function (e) {
+            e.preventDefault();
+            if ($("#ddlSections").val() != '') {
+                $("#risk9QustsPopup").modal('show');
+                $('#divRisk9QuestionsGrid').show();
+
+                var Risk9QuestionsGrid = $('#divRisk9QuestionsGrid').kendoGrid({
+                    dataSource: GetQuestionsBySectionId($("#hdnSectionId").val()),
+                    type: "json",
+                    sortable: true,
+                    scrollable: false,
+                    filterable: true,
+                    columns:
+                    [
+                    {
+                        title: "select",
+                        template: '<input  id="cheRisk9_QustIds"  data-risk9-id="#=QuestionId#" value="#=QuestionNumber#" name="cheRisk9_QustIds" class="checkbox" type="checkbox"/>',
+                        width: 20
+                    },
+                    {
+                        field: "QuestionNumber",
+                        title: "Question No",
+                        width: 100
+                    },
+                    {
+                        field: "Question",
+                        title: "Question",
+                        template: "<textarea id='editor9_#=QuestionId#' class='questionEditor9'></textarea>"
+                    }
+                    ],
+                    dataBound: function (e) {
+                        $(".questionEditor9").kendoEditor({
+                            resizable: true,
+                            tools: []
+                        });
+                        if (e.sender._data.length != 0)
+                            $($('.questionEditor9').data().kendoEditor.body).attr('contenteditable', false);
+
+                        //07/11/2017 Modified by Madan START
+                        var gridId = "#divRisk9QuestionsGrid";
+                        $(gridId + " table tbody tr[role='row']").each(function () {
+                            var checkBox = $(this).find("input[type = checkbox]")
+                            var QuestionId = $(checkBox).attr("data-risk9-id");
+                            var index = risk9QuestionIds.indexOf(QuestionId);
+                            if (index != -1) {
+                                $(checkBox).attr("checked", true);
+                            }
+                            else {
+                                $(checkBox).removeAttr("checked");
+                            }
+                        });
+                        //07/11/2017 Modified by Madan END
+
+                        for (var i = 0; i < e.sender._data.length; i++) {
+                            var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                            $("#editor9_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                        }
+
+                    }
+                });
+
+                //if ($(this).val() != '') {
+                //    var vSDVQuestionData = GetSDVQuesBySDVDetailsId('QOV', $("#hdnSDVDetails_0_Id").val());
+                //    $.each($("input[id='cheRisk9_QustIds']"), function () {
+                //        var gridCellValue = $(this).attr('data-risk9-id');
+                //        for (i = 0; i < vSDVQuestionData.length; i++) {
+                //            if (gridCellValue = vSDVQuestionData[i].QuestionId) {
+                //                $("input[data-risk9-id='" + vSDVQuestionData[i].QuestionId + "']").attr("checked", true);
+                //            }
+                //        }
+                //    });
+                //}
+            }
+            else {
+                alert('Please select section');
+            }
+        });
+    });
+</script>
+
+
+
+<style>
+    table.k-editor {
+        height: 82px;
+    }
+
+    .k-editor .k-editable-area {
+        height: 68px;
+    }
+</style>
+

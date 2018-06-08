@@ -1,0 +1,361 @@
+﻿@{
+    ViewBag.Title = "ViewRiskCriteria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="tabstrip" style="margin-top: 20px; margin-bottom: 50px; display:none" >
+    <ul>
+        <li class="k-state-active" id="tab1">Risk Criteria </li>
+        <li id="tab2">Action Items</li>
+        <li id="tab3">Mitigation</li>
+    </ul>
+    <div>
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="float: left; padding: 0;">Risk Criteria >> View </h3>
+            <a href="/RiskCriteria/AddRiskCriteria" class="btn btn-info btn-sm col-md-1" style="float: left; padding: 5px 0;">Add Risk Criteria</a>
+        </div>
+        <div style="">
+            <div id="divGrid" style="clear: both;"></div>
+        </div>
+    </div>
+    <div>
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="float: left; padding: 0;">Action Items >> View </h3>
+            <a href="/RiskCriteria/AddRCActionItems" class="btn btn-info btn-sm col-md-1" style="float: left; padding: 5px 0;">Add Actions </a>
+        </div>
+        <div id="divActionGrid" style="clear: both;"></div>
+    </div>
+    <div>
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="float: left; padding: 0;">Mitigation >> View </h3>
+            <a href="/RiskCriteria/AddRCMitigation" class="btn btn-info btn-sm col-md-1" style="float: left; padding: 5px 0;">Add Mitigation </a>
+        </div>
+        <div id="divMitigation" style="clear: both;"></div>
+    </div>
+</div>
+
+<script>
+
+    if ("@TempData["activetab"]" == "1") {
+
+        $('#tab1').addClass('k-state-active');
+        $('#tab2').removeClass('k-state-active');
+        $('#tab3').removeClass('k-state-active');
+    }
+
+    if ("@TempData["activetab"]" == "2") {
+
+        $('#tab1').removeClass('k-state-active');
+        $('#tab2').addClass('k-state-active');
+        $('#tab3').removeClass('k-state-active');
+    }
+
+    if ("@TempData["activetab"]" == "3") {
+
+        $('#tab1').removeClass('k-state-active');
+        $('#tab2').removeClass('k-state-active');
+        $('#tab3').addClass('k-state-active');
+    }
+
+    function DeleteRiskCriteria(RiskCriteriaId) {
+        if (RiskCriteriaId != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/RiskCriteria/DeleteRiskCriteria?RiskCriteriaId=" + RiskCriteriaId;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetRiskCriteria($("#ddlAssessmentTypes").val());
+                        $('#divGrid').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+
+            }
+        }
+    }
+
+    function DeleteRCActionItems(RCActionItemId) {
+        if (RCActionItemId != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/RiskCriteria/DeleteRCActionItems?RCActionItemId=" + RCActionItemId;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetRCActionItems();
+                        $('#divActionGrid').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+
+            }
+        }
+    }
+
+    function DeleteRCMitigation(RCMitigationId) {
+        if (RCMitigationId != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/RiskCriteria/DeleteRCMitigation?RCMitigationId=" + RCMitigationId;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetRCMitigation();
+                        $('#divMitigation').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+
+            }
+        }
+    }
+    //kendo validations here
+    var frmAddSectionsValidate = $("#frmAddSections").kendoValidator().data("kendoValidator");
+
+
+    $("#addSection").on("show.bs.modal", function () {
+        $("#addSection .k-tooltip-validation.k-invalid-msg").hide();
+    });
+
+    function GetRiskCriteria(AssessmentId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("GetRiskCriteria", "RiskCriteria")',
+            data: { strAssessmentTypeId: AssessmentId },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+    /**Get Risk Criteria Action Items**/
+    function GetRCActionItems() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRCActionItems", "RiskCriteria")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetRCMitigation() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRCMitigation","RiskCriteria")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    $(document).ready(function () {        
+        $("#tabstrip").show();
+        $("#tabstrip").kendoTabStrip({   });       
+        /**Get Risk Criteria**/
+        function GetRiskCriteria() {
+            var result = [];
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: '@Url.Action("GetRiskCriteria", "RiskCriteria")',
+                success: function (data) {
+                    result = data;
+                }
+            });
+            return result;
+        }
+
+        $('#divGrid').kendoGrid({
+            toolbar: ["excel"],
+            excel: {
+                fileName: "Risk Criteria.xlsx",
+                allPages: true,
+                filterable: true
+            },
+            dataSource: GetRiskCriteria(),
+            serverPaging: false,
+            serverFiltering: false,
+            serverSorting: false,
+            sortable: true,
+            scrollable: false,
+            pageable: {
+                pageSize: 10,
+                refresh: false,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            filterable: true,
+            columns:
+             [
+             {
+                 field: "RiskCriteria",
+                 title: "Risk Criteria",
+                 width: 200
+             },
+             {
+                 field: "Attribute",
+                 title: "Attribute",
+                 width: 200
+             },
+             {
+                 field: "DataValue",
+                 title: "Data Value",
+                 width: 400
+             },
+             {
+                 template: "<div style='position: relative;'><a onclick= 'DeleteRiskCriteria(#=RiskCriteriaId#)' style='cursor:pointer;' ><i class='fa fa-trash-o' aria-hidden='true' title='Delete' style='text-align:center;display: block;'></i></a></div>",
+                 title: "Action",
+                 width: 20
+             }
+             ]
+        });
+        $('#divActionGrid').kendoGrid({
+            toolbar: ["excel"],
+            excel: {
+                fileName: "Action Item.xlsx",
+                allPages: true,
+                filterable: true
+            },
+            dataSource: GetRCActionItems(),
+            serverPaging: false,
+            serverFiltering: false,
+            serverSorting: false,
+            sortable: true,
+            scrollable: false,
+            pageable: {
+                pageSize: 10,
+                refresh: false,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            filterable: true,
+            columns:
+             [
+             {
+                 field: "RiskCriteria",
+                 title: "Risk Criteria",
+                 width: 200
+             },
+             {
+                 field: "RiskCriteriaDescription",
+                 title: "RiskCriteria Description",
+                 width: 200
+             },
+             {
+                 field: "ActionItem",
+                 title: "Action Item",
+                 width: 400
+             },
+             {
+                 template: "<div style='position: relative;'><a onclick= 'DeleteRCActionItems(#=RCActionItemId#)' style='cursor:pointer;' ><i class='fa fa-trash-o' aria-hidden='true' title='Delete' style='text-align:center;display: block;'></i></a></div>",
+                 title: "Action",
+                 width: 20
+             }
+             ]
+        });
+        $('#divMitigation').kendoGrid({
+            toolbar: ["excel"],
+            excel: {
+                fileName: "Mitigation.xlsx",
+                allPages: true,
+                filterable: true
+            },
+            dataSource: GetRCMitigation(),
+            serverPaging: false,
+            serverFiltering: false,
+            serverSorting: false,
+            sortable: true,
+            scrollable: false,
+            pageable: {
+                pageSize: 10,
+                refresh: false,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            filterable: true,
+            columns:
+             [
+             {
+                 field: "RiskCriteria",
+                 title: "Risk Criteria",
+                 width: 200
+             },
+             {
+                 field: "DataValue",
+                 title: "RiskCriteria Description",
+                 width: 300
+             },
+             {
+                 field: "Mitigation",
+                 title: "Mitigation",
+                 width: 400
+             },
+             {
+                 template: "<div style='position: relative;'><a onclick= 'DeleteRCMitigation(#=RCMitigationId#)' style='cursor:pointer;' ><i class='fa fa-trash-o' aria-hidden='true' title='Delete' style='text-align:center;display: block;'></i></a></div>",
+                 title: "Action",
+                 width: 20
+             }
+             ]
+        });
+    });
+</script>
+
+<style>
+    a.k-button.k-button-icontext.k-grid-excel {
+        float: right;
+        background-color: #ccc;
+    }
+
+    .k-button:focus:active:not(.k-state-disabled):not([disabled]) {
+        box-shadow: inherit;
+    }
+
+    .k-button:active:hover, .k-button.k-state-active:hover {
+        border-color: transparent;
+    }
+</style>

@@ -1,0 +1,9 @@
+D:\MyProjects\PreIRMA\PreIRMA.BAL\bin\Debug\PreIRMA.BAL.dll
+D:\MyProjects\PreIRMA\PreIRMA.BAL\bin\Debug\PreIRMA.BAL.pdb
+D:\MyProjects\PreIRMA\PreIRMA.BAL\bin\Debug\PreIRMA.DAL.dll
+D:\MyProjects\PreIRMA\PreIRMA.BAL\bin\Debug\PreIRMA.DataContract.dll
+D:\MyProjects\PreIRMA\PreIRMA.BAL\bin\Debug\PreIRMA.DAL.pdb
+D:\MyProjects\PreIRMA\PreIRMA.BAL\bin\Debug\PreIRMA.DataContract.pdb
+D:\MyProjects\PreIRMA\PreIRMA.BAL\obj\Debug\PreIRMA.BAL.csprojResolveAssemblyReference.cache
+D:\MyProjects\PreIRMA\PreIRMA.BAL\obj\Debug\PreIRMA.BAL.dll
+D:\MyProjects\PreIRMA\PreIRMA.BAL\obj\Debug\PreIRMA.BAL.pdb

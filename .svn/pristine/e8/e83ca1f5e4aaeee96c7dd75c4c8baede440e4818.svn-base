@@ -1,0 +1,349 @@
+﻿@{
+    ViewBag.Title = "ViewAssesments";
+                    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form id="frmAddUsers2">
+    <div class="panel panel-default" style="padding: 0;" id="divAddAssesment">
+        <input type="hidden" id="hdnActivetab2" name="hdnActivetab" value="2" />
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="padding: 0; width: 90%;">Update Assessments >> View</h3>
+        </div>
+        <div class="panel-body" style="padding: 0;">
+            <div class="form-group col-md-4" style="margin-bottom: 0">
+                <input type="hidden" name="hdnClientName" id="hdnClientName2" value="@TempData["hdnClientName"]" />
+                <label class="control-label col-md-5" style="padding: 6px 0 0 0;">Client Company Name : </label>
+                <div class="col-md-7">
+                    <select id="ddlClientName2" name="ddlClientName" class="fullWidth" tabindex="1" required data-required-msg="Please select client company name" value="hdnClientName"></select>
+                </div>
+            </div>
+            <div class="form-group col-md-4" style="margin-bottom: 0; padding: 0;">
+                <input type="hidden" name="hdnSponserName" id="hdnSponserName2" value="@TempData["hdnSponserName"]" />
+                <label class="control-label col-md-5" style="padding: 6px 0 0 0;">Sponsor Company Name : </label>
+                <div class="col-md-7">
+                    <select id="ddlSponserName2" name="ddlSponserName" class="fullWidth" tabindex="2" required data-required-msg="Please select sponsor company name"></select>
+                </div>
+            </div>
+            <div class="form-group col-md-4" style="margin-bottom: 0">
+                <input type="hidden" name="hdnProtocalName" id="hdnProtocalName2" value="@TempData["hdnProtocalName"]" />
+                <label class="control-label col-md-4" style="padding: 6px 0 0 0;">Protocol Number : </label>
+                <div class="col-md-8">
+                    <select id="ddlProtocalName2" name="ddlProtocalName" class="fullWidth" tabindex="3" required data-required-msg="Please select protocol number"></select>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <div id="divGridAssesment" class="editable-height" style="margin-top: 30px;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="addUsersModal2" class="modal fade" role="dialog">
+
+        <div class="modal-dialog" style="width: 750px;">
+            <input type="hidden" id="hdnUserId2" name="hdnUserId" />
+            <input type="hidden" id="ddlAssessmentTypes2" name="ddlAssessmentType" />
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header col-md-12">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title col-md-3">Add Client</h4>
+                    <label id="versionNo"></label>
+                </div>
+
+                <div class="modal-body" style="padding: 0;">
+                    <div id='loadingmessage' class="loader" style='display: none; text-align:center;'>
+                        <img src="~/Images/reload.gif"/ height="30" width="30" style="text-align:center;">Saving....                        
+                    </div>
+                    <div class="form-group col-md-12" style="padding-top: 20px;">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">First Name :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtFirstName" id="txtFirstName2" class="form-control" placeholder="Enter First Name" required data-required-msg="Please enter first name" autofocus pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Last Name :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtLastName" id="txtLastName2" class="form-control" placeholder="Enter Last Name" required data-required-msg="Please enter last name" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" style="padding-top: 6px;">Email Address :</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="txtEmail" id="txtEmail2" class="form-control" required data-required-msg="Please enter email address" placeholder="Enter Email Address" data-email-msg="Please enter valid email address" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" style="padding-top: 6px;">Database Lock Date :</label>
+                        <div class="col-sm-8">
+                            <input type="text" onkeydown="return false" autocomplete="off" name="txtExpiryDate" id="txtExpiryDate2" required data-required-msg="Please select expiry date" placeholder="Enter Expiry Date" />
+                            <span class="k-invalid-msg" data-for="txtExpiryDate2" style="position: fixed"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:none;">
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <button type="button" name="btnSave" id="btnSave2" value="Save" class="col-md-offset-1 btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $("#addUsersModal2").on("show.bs.modal", function () {
+        $("#addUsersModal2 .k-tooltip-validation.k-invalid-msg").hide();
+    });
+
+    var validator = $("#frmAddUsers2").kendoValidator().data("kendoValidator");
+    function GetAssessmentTypes() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAdminAssessmentTypes", "User")',
+            async: false,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetClientDetails() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetClientDetails", "User")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+                //result.push({ ClientName: "New", ClientDetailsId: 0 });
+            }
+        });
+        return result;
+    }
+
+    function GetSponserDetails(ClientDetailsId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSponserDetails", "User")',
+            data: { ClientDetailsId: ClientDetailsId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+                //result.push({ SponserName: "New", SponserDetailsId: 0 });
+            }
+        });
+        return result;
+    }
+
+    function GetProtocolDetails(SponserDetailsId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetProtocolDetails", "User")',
+            data: { SponserDetailsId: SponserDetailsId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+                //result.push({ ProtocalName: "New", ProtocalDetailsId: 0 });
+            }
+        });
+        return result;
+    }
+
+    function GetVersionsByProtocolId(ClientDetailsId, SponserDetailsId, ProtocalDetailsId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetVersionsByProtocolId", "User")',
+            data: { ClientDetailsId: ClientDetailsId, SponserDetailsId: SponserDetailsId, ProtocalDetailsId: ProtocalDetailsId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function AddNewAssesment(htmlobj) {
+        $('#addUsersModal2').modal('show');
+        var vGrid = $("#divGridAssesment").data("kendoGrid");
+        var vSelectedRow = $(htmlobj).closest("tr");
+        var vSelectedIndex = vSelectedRow.index();
+        var vSelectedDataItem = vGrid.dataItem(vSelectedRow);
+        var vAssessmentType = vSelectedDataItem.AssessmentType;
+        var vAssessmentTypeId = vSelectedDataItem.AssessmentTypeId
+        var vVersionNo = vSelectedDataItem.VersionNo + 1;
+        var vString = vAssessmentType + '_Version_' + vVersionNo;
+        $("#versionNo").text(vString);
+        $("#ddlAssessmentTypes2").val(vAssessmentTypeId);
+        $('#txtFirstName2').val("");
+        $('#txtLastName2').val("");
+        $('#txtEmail2').val("");
+        $('#txtExpiryDate2').val("");
+    }
+
+    function GetUsers() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetUsers", "User")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+
+    $(document).ready(function () {
+
+        $("#usersLink").addClass('active');
+
+        var clientName = $("#ddlClientName2").kendoDropDownList({
+            optionLabel: "--Select Client Company Name--",
+            dataTextField: "ClientName",
+            dataValueField: "ClientDetailsId",
+            dataSource: GetClientDetails()
+        }).data("kendoDropDownList");
+
+        var sponserName = $("#ddlSponserName2").kendoDropDownList({
+            optionLabel: "--Select Sponsor Company Name--",
+            dataTextField: "SponserName",
+            dataValueField: "SponserDetailsId",
+            dataSource: []
+        }).data("kendoDropDownList");
+
+        var protocalName = $("#ddlProtocalName2").kendoDropDownList({
+            optionLabel: "--Select Protocol Number--",
+            dataTextField: "ProtocalName",
+            dataValueField: "ProtocalDetailsId",
+            dataSource: []
+        }).data("kendoDropDownList");
+
+        $("#ddlClientName2").change(function () {
+            $("#ddlSponserName2").data("kendoDropDownList").setDataSource([]);
+            $("#ddlProtocalName2").data("kendoDropDownList").setDataSource([]);
+            if (clientName.text() != "New" && $(this).data("kendoDropDownList").value() != null && $(this).data("kendoDropDownList").value() != "") {
+                $("#ddlSponserName2").data("kendoDropDownList").value("");
+                $("#ddlProtocalName2").data("kendoDropDownList").value("");
+                var datasponser = GetSponserDetails($(this).data("kendoDropDownList").value());
+                $("#ddlSponserName2").data("kendoDropDownList").setDataSource(datasponser);
+                $("#hdnClientName2").val(clientName.text());
+                $('#divGridAssesment').hide();
+            }
+        });
+
+        $("#ddlSponserName2").change(function () {
+
+            $("#ddlProtocalName2").data("kendoDropDownList").setDataSource([]);
+            if (sponserName.text() != "New" && $(this).data("kendoDropDownList").value() != null && $(this).data("kendoDropDownList").value() != "") {
+                $("#ddlProtocalName2").data("kendoDropDownList").value("");
+                var dataProtocol = GetProtocolDetails($(this).data("kendoDropDownList").value());
+                $("#ddlProtocalName2").data("kendoDropDownList").setDataSource(dataProtocol);
+                $("#hdnSponserName2").val(sponserName.text());
+                $('#divGridAssesment').hide();
+            }
+        });
+
+        $("#ddlProtocalName2").change(function () {
+
+            $("#hdnProtocalName2").val(protocalName.text());
+            $('#divGridAssesment').show();
+            var gridAssesments = $('#divGridAssesment').kendoGrid({
+                dataSource: GetVersionsByProtocolId($("#ddlClientName2").val(), $("#ddlSponserName2").val(), $("#ddlProtocalName2").val()),
+                sortable: true,
+                scrollable: false,
+                pageable: {
+                    pageSize: 10,
+                    refresh: false,
+                    pageSizes: true,
+                    buttonCount: 5
+                },
+                filterable: true,
+                columns:
+                 [
+                 {
+                     field: "VersionNo",
+                     hidden: true
+                 },
+                 {
+                     field: "AssessmentType",
+                     title: "Assessment Type",
+                     width: 100
+                 },
+                 {
+                     field: "VersionName",
+                     title: "Assessment Name",
+                     width: 200
+                 },
+                 {
+                     title: "Add",
+                     template: '#if(AddAssesment=="true"){#<div><a onClick="AddNewAssesment(this)"><button type="button" class="btn btn-info btn-sm" id="btnAddUsers" name="btnAddUsers">Add New Version</button></a></div>#}#',
+                     width: 10
+                 }
+                 ]
+            });
+        });
+
+        var todayDate = new Date();
+
+        $("#txtExpiryDate2").kendoDatePicker({
+            //min: todayDate,
+            format: "MM/dd/yyyy"
+        });
+
+        $("#btnSave2").click(function () {
+            if (validator.validate()) {
+                var form = $("#frmAddUsers2").serialize();
+                $("#loadingmessage").show();
+                setTimeout(function () {
+                    $.ajax({
+                        type: 'POST',
+                        //traditional: true,
+                        //dataType: 'json',
+                        async:true,
+                        url: '@Url.Action("AddUpdateUsers", "User")',
+                        data: form,
+                        success: function (response) {
+                            $("#loadingmessage").hide();
+                            $('#addUsersModal2').modal('hide');
+                            //$("#hdnClientName2").val("");
+                            //$("#hdnSponserName2").val("");
+                            //$("#hdnProtocalName2").val("");
+                            if (response.Code > 0) {
+                                var gridData = GetVersionsByProtocolId($("#ddlClientName2").val(), $("#ddlSponserName2").val(), $("#ddlProtocalName2").val());
+                                $('#divGridAssesment').data("kendoGrid").dataSource.data(gridData);
+                                $('#spanSuccesMessage').text(response.Message);
+                                $("#divSuccesMessage").show();
+                                $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+
+                            }
+                            else if (response.toLowerCase().indexOf("unable") != -1) {
+                                $('#spanErrorMessage').text(response);
+                                $("#divErrorMessage").show();
+                                $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                            }
+                            else {
+                                $('#spanErrorMessage').text(response);
+                                $("#divErrorMessage").show();
+                                $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                            }
+                        }
+                    });
+                }, 1000);
+            };
+        });
+    });
+</script>

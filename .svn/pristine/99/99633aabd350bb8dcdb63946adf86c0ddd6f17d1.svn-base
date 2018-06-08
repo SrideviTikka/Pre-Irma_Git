@@ -1,0 +1,483 @@
+﻿@{
+    ViewBag.Title = "AddUpdateClientInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model PreIRMA.DataContract.DCClientInfo
+
+<div id="tabstripClient" style="margin-top: 20px; margin-bottom: 50px; display: none">
+    <ul>
+        <li class="k-state-active" id="tabClient1">Generic Info </li>
+        <li id="tabClient2">Uploads</li>
+    </ul>
+    <div>
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="float: left; padding: 0;">Generic Info >> View </h3>
+        </div>
+        <form id="frmAddUpdateClientInfo" action="~/ClientInfo/AddUpdateClientInfo" method="post">
+            <input type="hidden" id="hdnClientId" name="hdnClientId" value="@Model.ClientId"/>
+            <input type="hidden" id="hdnUserId" name="hdnUserId" value="@Model.UserId" />
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">First Name :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtCCFirstName" id="txtCCFirstName" value="@Model.FirstName" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~-]+" required data-required-msg="Please enter first name" validationmessage="Please enter valid input"/>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Last Name :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtCCLastName" id="txtCCLastName" value="@Model.LastName" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~-]+" required data-required-msg="Please enter last name" validationmessage="Please enter valid input"/>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Contact Title :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtContactTitle" id="txtContactTitle" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" value="@Model.ContactTitle" class="form-control" validationmessage="Please enter valid input" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Email Address:</label>
+                <div class="col-md-6">
+                    <input type="email" name="txtEmail" id="txtEmail" value="@Model.EmailAddress" class="form-control" required data-required-msg="Please enter email address" data-email-msg="Please enter valid email address"  />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Company Name :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtCompanyName" id="txtCompanyName" value="@Model.CompanyName" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" required data-required-msg="Please enter company name" validationmessage="Please enter valid input"/>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Address line 1 :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtAddress1" id="txtAddress1" value="@Model.Addressline1" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" class="form-control" required data-required-msg="Please enter address1" validationmessage="Please enter valid input"/>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Address line 2 :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtAddress2" id="txtAddress2" value="@Model.Addressline2" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" class="form-control" validationmessage="Please enter valid input" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Address line 3 :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtAddress3" id="txtAddress3" value="@Model.Addressline3" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" validationmessage="Please enter valid input" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">City/Province :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtCityProvince" id="txtCityProvince" value="@Model.CityProvince" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" validationmessage="Please enter valid input" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Country:</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtCountry" id="txtCountry" value="@Model.Country" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" validationmessage="Please enter valid input" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">State :</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtState" id="txtState" value="@Model.State" class="form-control" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" validationmessage="Please enter valid input" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Zip Code:</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtZipCode" id="txtZipCode" value="@Model.ZipCode" class="form-control" maxlength="5" validationmessage="Please enter valid input" pattern="\d{5}" required data-required-msg="Please enter zip code"/>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Office Phone:</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtOfficePhone" id="txtOfficePhone" value="@Model.OfficePhone" class="form-control" pattern="[0-9\s._+^%$#!~/&*:=?\|,;`(){}-]+" validationmessage="Please enter valid input" maxlength="15" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label  col-md-3">Mobile Number:</label>
+                <div class="col-md-6">
+                    <input type="text" name="txtMobilePhone" id="txtMobilePhone" value="@Model.MobilePhone" class="form-control" required data-required-msg="Please enter mobile number" validationmessage="Please enter valid input" pattern="[0-9\s-+]+" maxlength="15"/>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <div class="form-group">
+                    <div class="col-md-11 text-center">
+                        <input type="submit" name="btnSave" id="btnSave" value="Save" class="col-md-offset-1 btn btn-primary" />
+                        <input type="submit" name="btnSave" id="btnUpdate" value="Update" class="col-md-offset-1 btn btn-primary" />
+                        @*<a href="~/User/ViewUsers" class="btn btn-default btn-sm btn-round" tabindex="4">Cancel</a>*@
+                    </div>
+                </div>
+            </div>
+            @* <div class="form-group col-md-12" style="margin-bottom: 70px;">
+        <div class="col-md-offset-3 col-md-3">
+            <input type="file" name="fleUploadLogo" id="fleUploadLogo" value="UploadImage" />
+        </div>
+    </div>*@
+        </form>
+
+    </div>
+    <div>
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="float: left; padding: 0;">Uploads >> View </h3>
+        </div>
+        <form id="frmUploadLogo" action="~/ClientInfo/UploadLogo" method="post" enctype="multipart/form-data">
+            <div class="form-group col-md-12">
+                <div class="col-md-12" style="padding: 15px; border: 1px solid #e6e6e6;">
+                    <div id="imgHolder">
+                        <img id="idimg" src="#" alt="your image" style="display: none; margin-left: 15px;" height="61" width="210" />
+                        <h4 style="float: left; margin: 0; padding-right: 20px;">Select Logo:</h4>
+                        <input class='btn btn-default' type="file" name="fleUpload" id="fleUploadLogo" value="UploadLogo" style="float: left" onchange="readURL(this);" accept=".png, .jpg, .jpeg">
+                        <input type="submit" disabled name="btnLogoSave" id="btnLogoSave" class="btn btn-primary col-md-1" value="Save" style="float: right; background-color: #38bbf6; border: 1px solid #51c6fb;" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!--Modal Start-->
+        <div id="UploadDocumentModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="frmUploadDocument" action="~/ClientInfo/UploadLogo" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="hdnClientUploadId" name="hdnClientUploadId" value="@Model.ClientUploadId"/>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add/Edit Document</h4>
+                        </div>
+                        <div class="modal-body" style="float: left; width: 100%;">
+                            <div class="form-group">
+                                <div class="col-sm-12" id="divFileUpload" style="display: none;">
+                                    <label class="control-label col-md-4" style="padding-top: 6px; margin: 10px 0;">Upload Attachment :</label>
+                                    @*<h5 style="float: left; margin: 0; padding-right: 20px;">Upload Attachment :</h5>*@
+                                    <div class="col-md-7">
+                                        <input type="file" name="fleUpload" id="fleUploadDocument" class='btn btn-default' data-required-msg="Please select a file" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" id="divDescription">
+                                    <label class="control-label col-md-4" style="padding-top: 6px; margin: 10px 0;">Description :</label>
+                                    @*<input type="textarea" name="txtDescription" id="txtDescription" class="form-control"  style="width: 58%;margin: 10px 0;"/>*@
+                                    <div class="col-md-7">
+                                        <textarea id="txtDescription" name="txtDescription" placeholder="Enter Description" required data-required-msg="Please enter description" class="form-control " @*style="width: 58%; margin: 10px 0;"*@></textarea>
+                                        <span class="k-invalid-msg" data-for="txtDescription"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" id="divancUploadedAttachmet" style="display: none;">
+                                    <label class="control-label col-md-4" style="padding-top: 6px; margin: 10px 0;">Uploaded Attachment :</label>
+                                    <div class="col-md-7" style="padding-top: 6px; margin: 10px 0;">
+                                        <a id="ancUploadedAttachmet" target="_blank">View Here</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="float: right;">Close</button>
+                            <input type="submit" name="btnDocumentSave" id="btnDocumentSave" class="btn btn-primary col-md-2" value="Save" style="float: right; margin-right: 10px;" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--Modal End-->
+        <div id="divDocument" style="clear: both; border: 1px solid #e6e6e6; margin: 20px 0; display: inline-block; padding: 15px; width: 100%;">
+            <label><h4>Documents</h4></label>
+            <button type="button" class="btn btn-info btn-sm col-md-1" id="btnAddDocument" name="btnAddDocument" style="float: right; margin-bottom: 10px;">Add Document</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    if ("@TempData["activetab"]" == "1") {
+
+        $('#tabClient1').addClass('k-state-active');
+        $('#tabClient2').removeClass('k-state-active');
+    }
+
+    if ("@TempData["activetab"]" == "2") {
+
+        $('#tabClient1').removeClass('k-state-active');
+        $('#tabClient2').addClass('k-state-active');
+    }
+
+    $("#btnAddDocument").click(function () {
+        $("#UploadDocumentModal").modal("show");
+        $("#divFileUpload").show();
+        $("#divancUploadedAttachmet").hide();
+        $("#fleUploadDocument").attr("required", "required")
+        $("#hdnClientUploadId").val("");
+        $("#txtDescription").val("");
+        var $el = $('#fleUploadDocument');
+        $el.wrap('<form>').closest('form').get(0).reset();
+        $el.unwrap();
+    });
+
+    $("#tabClient2").click(function () {
+        if ($('#fleUploadLogo').val()) {
+            var $es = $('#fleUploadLogo');
+            $es.wrap('<form>').closest('form').get(0).reset();
+            $es.unwrap();
+            $("#btnLogoSave").attr("disabled", "disabled");
+            $("#idimg").hide();
+        }
+    });
+
+    function DeleteUploadLogo(vClientuploadId) {
+        if (confirm("Are you sure you want to delete the logo?")) {
+            var URL = "/ClientInfo/DeleteUploadLogo?ClientUploadId=" + vClientuploadId;
+            $.post(URL, function (strMessage) {
+                if (strMessage.trim() != "") {
+                    if (strMessage.toLowerCase().indexOf("success") != -1) {
+                        $('#spanSuccesMessage').text(strMessage);
+                        $("#divSuccesMessage").show();
+                        $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                    }
+                    else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                        $('#spanErrorMessage').text(strMessage);
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                    var htmllogo = "<img id='idimg' src='#' alt='your image' height='61px' width='210px' style='display:none;'/>";
+                    htmllogo += "<h4 style='float: left; margin: 0; padding-right: 20px;'>Select Logo:</h4>"
+                    htmllogo += "<input class='btn btn-default' type='file' name='fleUpload' id='fleUploadLogo' value='UploadLogo' style='float: left' onchange='readURL(this);' accept='.png, .jpg, .jpeg'>"
+                    htmllogo += "<input type='submit' disabled name='btnLogoSave' id='btnLogoSave' class='btn btn-primary col-md-1' value='Save' style='float: right' />";
+                    $("#imgHolder").html(htmllogo);
+                }
+                else {
+                    $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                    $("#divErrorMessage").show();
+                    $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                }
+            })
+        }
+    }
+
+    function DeleteUploadFile(ClientuploadId) {
+        if (confirm("Are you sure you want to delete the file?")) {
+            var URL = "/ClientInfo/DeleteUploadLogo?ClientUploadId=" + ClientuploadId;
+            $.post(URL, function (strMessage) {
+                if (strMessage.trim() != "") {
+                    if (strMessage.toLowerCase().indexOf("success") != -1) {
+                        $('#spanSuccesMessage').text(strMessage);
+                        $("#divSuccesMessage").show();
+                        $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                    }
+                    else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                        $('#spanErrorMessage').text(strMessage);
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                    var gridData = GetClientUploadedFile();
+                    $('#divDocument').data("kendoGrid").dataSource.data(gridData);
+                }
+                else {
+                    $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                    $("#divErrorMessage").show();
+                    $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                }
+            })
+        }
+
+    }
+
+    function GetClientUploadedFile() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetClientUploadedFile", "ClientInfo")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data.map(function (currVal, index, array) {
+                    currVal.UploadLogo = encodeURI(currVal.UploadLogo);
+                    return currVal;
+                });
+            }
+        });
+        return result;
+    }
+
+    var fileTypes = ['jpg', 'jpeg', 'png'];  //acceptable file types
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var extension = input.files[0].name.split('.').pop().toLowerCase(),  //file extension from input file
+           isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
+            if (isSuccess) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function () {
+                        var imgHeight = image.height;
+                        var imgWidth = image.width;
+                        if (imgHeight == 61 && imgWidth == 210) {
+                            $('#idimg')
+                            .attr('src', e.target.result)
+                            .width(210)
+                            .height(61);
+                            $('#idimg').show();
+                            $("#btnLogoSave").removeAttr("disabled");
+                        }
+                        else {
+                            alert("Image should be of height = 61px and widhth = 210px");
+                            $('#idimg').hide();
+                            $("#btnLogoSave").attr("disabled", "disabled");
+                            return false;
+                        }
+                    };
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            else {
+                alert("Image should be of 'jpg','jpeg','png' format");
+                $('#idimg').hide();
+                $("#btnLogoSave").attr("disabled", "disabled");
+                return false;
+            }
+        }
+        else {
+            $('#idimg').hide();
+            $("#btnLogoSave").attr("disabled", "disabled");
+            return false;
+        }
+    }
+
+    function EditClientUploadFile(ClientUploadId) {
+
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetUploadFileByClientUploadId", "ClientInfo")',
+            data: { ClientUploadId: ClientUploadId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#UploadDocumentModal').modal('toggle');
+                    $("#divFileUpload").hide();
+                    $("#fleUploadDocument").removeAttr("required")
+                    $("#hdnClientUploadId").val(ClientUploadId);
+                    $("#txtDescription").val(data[0].Description);
+                    $("#divancUploadedAttachmet").show();
+                    $("#ancUploadedAttachmet").attr("href", data[0].UploadLogo);
+                }
+            }
+        });
+    }
+    var vClientuploadId = 0;
+    function GetClientInfo() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetClientInfo", "ClientInfo")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data != "") {
+                    $("#txtCCFirstName").val(data[0].FirstName);
+                    $("#txtCCLastName").val(data[0].LastName);
+                    $("#txtContactTitle").val(data[0].ContactTitle);
+                    $("#txtEmail").val(data[0].EmailAddress);
+                    $("#txtCompanyName").val(data[0].CompanyName);
+                    $("#txtAddress1").val(data[0].Addressline1);
+                    $("#txtAddress2").val(data[0].Addressline2);
+                    $("#txtAddress3").val(data[0].Addressline3);
+                    $("#txtCityProvince").val(data[0].CityProvince);
+                    $("#txtState").val(data[0].State);
+                    $("#txtCountry").val(data[0].Country);
+                    $("#txtZipCode").val(data[0].ZipCode);
+                    $("#txtOfficePhone").val(data[0].OfficePhone);
+                    $("#txtMobilePhone").val(data[0].MobilePhone);
+                    $("#hdnClientId").val(data[0].ClientId);
+                    $("#hdnUserId").val(data[0].UserId);
+                    vClientuploadId = data[0].ClientUploadId;
+                    if (data[0].UploadLogo != "") {
+                        var html = "<h4 style='float: left; margin: 0; padding-right: 20px;'>Logo:</h4>";
+                        html += "<img id='idimg' src='" + data[0].UploadLogo + "' alt='your image' height='61px' width='210px'/>";
+                        html += "<a href='" + data[0].UploadLogo + "' download style='cursor: pointer;'><button type='button' class='btn btn-info btn-sm' style='display:none;'>Download Logo</button></a>"
+                        html += "<input type='button' id='deleteLogo' value='Delete' onclick='DeleteUploadLogo(vClientuploadId)' class='btn btn-danger' style='margin-left: 20px;'/>";
+                        $("#imgHolder").html(html);
+                    }
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+
+        $("#idClientInfo").addClass('active');
+
+        $("#tabstripClient").show();
+        $("#tabstripClient").kendoTabStrip({});
+
+        var validator = $("#frmAddUpdateClientInfo").kendoValidator().data("kendoValidator");
+        var frmUploadLogoValidator = $("#frmUploadLogo").kendoValidator().data("kendoValidator");
+
+        var frmUploadDocumentValidator = $("#frmUploadDocument").kendoValidator({
+            rules: {
+                customRule1: function (input) {
+                    if (input.is("[name=txtDescription]")) {
+                        var reg = /[<,>]/g;
+                        return !reg.test($('[name="txtDescription"]').val());
+                    }
+                    return true;
+                }
+            },
+            messages: {
+                customRule1: "Please enter valid input",
+            }
+        }).data("kendoValidator");
+
+        $("#UploadDocumentModal").on("show.bs.modal", function () {
+            $("#UploadDocumentModal .k-tooltip-validation.k-invalid-msg").hide();
+        });
+        GetClientInfo();
+        if ($("#hdnClientId").val() != 0 && $("#hdnClientId").val() != "") {
+            $("#btnUpdate").show();
+            $("#btnSave").hide();
+        }
+        else {
+            $("#btnUpdate").hide();
+            $("#btnSave").show();
+        }
+
+
+        var gridSections = $('#divDocument').kendoGrid({
+            dataSource: GetClientUploadedFile(),
+            sortable: true,
+            scrollable: false,
+            pageable: {
+                pageSize: 5,
+                refresh: false,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            filterable: true,
+            columns:
+             [
+             {
+                 field: "UserId",
+                 hidden: true
+             },
+             {
+                 field: "Description",
+                 title: "Description",
+                 width: 300
+             },
+             {
+                 template: "<div style='position: relative;left: 9px;'><a href='#:UploadLogo#' target='_blank'><button type='button' class='btn btn-info btn-sm' >View UploadFile</button></a>&nbsp;&nbsp;&nbsp;</a></div>",
+                 title: "Uploaded File",
+                 width: 200
+             },
+             {
+                 template: "<div style='position: relative;left: 9px;'><a onClick='EditClientUploadFile(#=ClientUploadId#)'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Edit'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='#:UploadLogo#' download style='cursor: pointer;'><i class='fa fa-download' aria-hidden='true' title='Download'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a onclick='DeleteUploadFile(#=ClientUploadId#)' style='cursor: pointer;'><i class='fa fa-trash-o' aria-hidden='true' title='Delete'></i></a></div>",
+                 title: "Action",
+                 width: 100
+             }
+             ]
+        });
+    });
+</script>

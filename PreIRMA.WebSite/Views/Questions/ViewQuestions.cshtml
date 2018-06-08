@@ -1,0 +1,1051 @@
+﻿@using PreIRMA.DataContract
+
+@{
+    ViewBag.Title = "ViewQuestions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    DCUsers LoggedInUser = (DCUsers)Session["UserLogon"];
+}
+<div class="panel panel-default m-t-20" style="padding-top: 10px; padding-bottom: 30px" id="divAddQuestion">
+    <div class="panel-heading">
+        <h3 class="panel-title col-md-11">Questions >> View</h3>
+
+        <button type="button" id="btnaddQuestionModal" class="btn btn-info btn-sm">Add Question</button>
+    </div>
+    <div class="form-group col-md-12" style="padding-top: 15px;">
+        <label class="control-label col-md-3" style="padding-top: 6px;">Assessment Types :</label>
+        <div class="col-md-5">
+            <select id="ddlAssessmentTypes" name="ddlAssessmentTypes" required data-required-msg="Please select assessment type" class="fullWidth"></select>
+        </div>
+    </div>
+    <div class="form-group" style="padding-bottom: 80px;">
+        <label class="control-label col-md-3" style="padding-top: 6px;">Select Sections  : </label>
+        <div class="col-md-5">
+            <select id="ddlSections" name="ddlSections" class="fullWidth" tabindex="1" required data-required-msg="Please select section"></select>
+        </div>
+    </div>
+    <div class="panel-body" style="padding: 0;">
+        <div id="divGridAdmin" class="editable-height" style="display: none; margin-top: 35px;"></div>
+        <div id="divGridUser" class="editable-height" style="display: none; margin-top: 35px;"></div>
+    </div>
+</div>
+<input type="hidden" name="hdnSectionId" id="hdnSectionId" value="@TempData["hdnSectionId"]" />
+<input type="hidden" name="hdnQuestionId" id="hdnQuestionId" />
+
+<!-- Modal -->
+<div class="modal fade" id="addQuestionModal" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 1100px !important;">
+        <form id="frmAddQuestion">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header col-md-12">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title col-md-2">Add Question</h4>
+                    <div class="form-group col-md-5" style="margin-bottom: 0; display: none;" id="divlblSection">
+                        <label class="control-label col-md-3">Section :</label>
+                        <div class="col-md-9">
+                            <label id="lblSection"></label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-bottom: 0">
+                        <label class="control-label col-md-6">Assessment Type :</label>
+                        <div class="col-md-6">
+                            <label id="lblAssessmentType"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body col-md-12" @*style="padding-left: 0; padding-right: 0; padding-bottom: 0;"*@>
+                    <div>
+                        <div class="demo-section k-content">
+                            <ul id="panelbar">
+                                <li id="liQuestions" class="k-state-active">Question Text & Instructions
+                                <div class="row">
+                                    <div class="col-md-12" style="margin: 20px 0;">
+                                        <div class="form-group col-md-6" style="margin-bottom: 0;">
+                                            <label class="control-label col-md-4" style="padding-top: 6px; text-align: left;">Question No : </label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="txtQuestionNum" id="txtQuestionNum" class="form-control" tabindex="1" required data-required-msg="Please enter question number" placeholder="Enter Question Number" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6" style="display: none;" id="divddlChangeSection">
+                                            <label class="control-label col-md-3">Sections :</label>
+                                            <div class="col-md-9">
+                                                <select id="ddlChangeSection" name="ddlChangeSection" data-required-msg="Please select Section" class="fullWidth"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12 edit-area-height edit-area-height1 " style="margin-bottom: 0;">
+                                            <label class="control-label col-md-12" style="padding-top: 6px; text-align: left;">Question :</label>
+                                            <div>
+                                                <textarea id="txtQuestion" name="txtQuestion" placeholder="Enter Question" required data-required-msg="Please enter question" tabindex="2"></textarea>
+                                                <span class="k-invalid-msg" data-for="txtQuestion"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12 edit-area-height" style="margin-bottom: 0;">
+                                            <label class="control-label col-md-12" style="padding-top: 6px; text-align: left;">Instructions :</label>
+                                            <div>
+                                                <textarea id="txtInstructions" name="txtInstructions" placeholder="Enter Instructions" required data-required-msg="Please enter instructions" tabindex="3"></textarea>
+                                                <span class="k-invalid-msg" data-for="txtInstructions"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </li>
+                                <li id="liSeverity">Risk Score Assignment
+                 
+                                <div class="row">
+                                    <div class="form-group col-md-12" style="margin: 20px 0;">
+                                        <label class="control-label col-md-3">Severity :</label>
+                                        <div class="col-md-7">
+                                            <select id="ddlSeverity" name="ddlSeverity" required data-required-msg="Please select severity" tabindex="4" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Probability :</label>
+                                        <div class="col-md-7">
+                                            <select id="ddlProbability" name="ddlProbability" required data-required-msg="Please select probability" tabindex="5" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Detectability :</label>
+                                        <div class="col-md-7">
+                                            <select id="ddlDetectability" name="ddlDetectability" required data-required-msg="Please select detectability" tabindex="6" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                </li>
+                                <li id="liRiskCriteria" class="clRiskCriteria">Risk Management
+                                    <div class="form-group col-md-12" style="margin-top: 25px;">
+                                        <input type="hidden" name="hdnRiskCriteria" id="hdnRiskCriteria" />
+                                        <label class="control-label col-md-3">Risk Criteria Topic :</label>
+                                        <div class="col-md-8">
+                                            <select id="ddlRiskCriteria" name="ddlRiskCriteria" required data-required-msg="Please select risk criteria topic" tabindex="7" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Impact :</label>
+                                        <div class="col-md-8">
+                                            <select id="ddlImpact" name="ddlImpact" required data-required-msg="Please select impact" tabindex="10" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Confirmation of Compliance :</label>
+                                        <div class="col-md-8">
+                                            <select id="ddlConfirmationComplience" name="ddlConfirmationComplience" required data-required-msg="Please select confirmation of compliance" tabindex="11" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Risk Criteria Description:</label>
+                                        <div class="col-md-8">
+                                            <select id="ddlRiskCriteriaDescription" name="ddlRiskCriteriaDescription" required data-required-msg="Please select risk criteria description " tabindex="8" class="fullWidth"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Mitigation :</label>
+                                        <div class="col-md-8 left-pan">
+                                            <select id="ddlMitigation" name="ddlMitigation" required data-required-msg="Please select mitigation" tabindex="12" class="fullWidth" data-placeholder="--Select Mitigation--"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label col-md-3">Action Items :</label>
+                                        <div class="col-md-8 left-pan">
+                                            <select id="ddlActionItems" name="ddlActionItems" required data-required-msg="Please select action items" tabindex="9" class="fullWidth" data-placeholder="--Select Action Items--"></select>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" name="btnSave" id="btnSave" class="btn btn-info save-info">Save</button>
+                    <button type="button" class="btn btn-default close-info" data-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    /*.save-info {
+        position: absolute;
+        bottom: 1%;
+        right: 10%;
+    }
+
+    .close-info {
+        position: absolute;
+        bottom: 1%;
+        right: 3%;
+    }*/
+
+    .editable-height table.k-editor {
+        height: 50px;
+    }
+
+    .editable-height td.k-editable-area {
+        height: 80px;
+    }
+
+    /*.editable-height-user table.k-editor{
+        height: 89px;
+    }
+
+    .editable-height-user td.k-editable-area {
+        height: 75px;
+    }*/
+
+    .left-pan span.k-widget {
+        float: left;
+    }
+
+    .left-pan .k-button {
+        text-align: left;
+    }
+
+    .k-panelbar .k-content {
+        border: initial;
+        margin: 10px 0;
+    }
+
+    /* Important part */
+    /*.modal-dialog{
+    overflow-y: initial !important
+}
+.clRiskCriteria{
+    height: 800px;
+    overflow-y: auto;
+}*/
+</style>
+
+<!-- ToolTip  -->
+<div id="idTooltipPopupWindow" style="display: none;">
+    <input type="hidden" id="idHidden_tooltipId" />
+    <div class="col-md-11">
+        <div class="form-group clearfix">
+            <label class="control-label col-md-2">
+                Text
+            </label>
+            <div class="col-md-9">
+                <input type="text" id="idEditorText" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-11">
+        <div class="form-group clearfix">
+            <label class="control-label col-md-2">
+                Tooltip 
+            </label>
+            <div class="col-md-9">
+                <textarea id="idEditorTooltipText" rows="4" class="form-control" style="height: 100px !important;"> </textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3 col-md-offset-3">
+                <button class="btn btn-sm btn-default" id="insertEditorTooltipButton">Insert</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function GetUserAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetUserAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetAdminAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetAdminAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function QuestionsSortingBySortKey(QuestionId, SectionId, Arrow, AssessmentTypeId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("QuestionsSortingBySortKey", "Questions")',
+            data: { AssessmentTypeId: AssessmentTypeId, SectionId: SectionId, Arrow: Arrow, QuestionId: QuestionId },
+            success: function (data) {
+                result = data;
+                if ("@LoggedInUser.UserType" == "A") {
+                    var sortAdminGridData = GetQuestionsBySectionId(SectionId);
+                    $('#divGridAdmin').data("kendoGrid").dataSource.data(sortAdminGridData);
+                }
+                else {
+                    var sortUserGridData = GetQuestionsBySectionId(SectionId);
+                    $('#divGridUser').data("kendoGrid").dataSource.data(sortUserGridData);
+                }
+
+            }
+        });
+        return result;
+    }
+
+    if ("@LoggedInUser.UserType" == "A") {
+        var data = GetAdminAssessmentTypes();
+    }
+    else {
+        var data = GetUserAssessmentTypes();
+    }
+
+    var vDdlAssessmentTypess = $("#ddlAssessmentTypes").kendoDropDownList({
+        dataSource: data,
+        dataValueField: "AssessmentTpyeId",
+        dataTextField: "AssessmentType",
+        index: 0,
+        optionLabel: "--Select Assessment Types --",
+    }).data("kendoDropDownList");
+
+    function GetQuestionsBySectionId(SectionId) {
+        var result = [];
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetQuestionsBySectionId", "Questions")',
+            data: { SectionId: SectionId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data.length > 1) {
+                    data.forEach(function (item, index, array) {
+                        if (index == 0) {
+                            data[index].viewUpButton = false;
+                            data[index].viewDownButton = true;
+                        }
+                        else if (index == array.length - 1) {
+                            data[index].viewUpButton = true;
+                            data[index].viewDownButton = false;
+                        }
+                        else {
+                            data[index].viewUpButton = true;
+                            data[index].viewDownButton = true;
+                        }
+                    });
+                }
+                else if (data.length == 1) {
+                    data[0].viewUpButton = false;
+                    data[0].viewDownButton = false;
+                }
+                result = data;
+            }
+
+        });
+        return result;
+    }
+
+    function GetQuestions() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetQuestions", "Questions")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetSections(AssessmentTypeId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSections", "Sections")',
+            data: { strAssessmentTypeId: AssessmentTypeId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    /**Get Risk Criteria**/
+    function GetRiskCriteria() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaByAttributeType", "RiskCriteria")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetRiskCriteriaDetailsByRiskCriteria(RiskCriteria, Attribute) {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaDetailsByRiskCriteria", "RiskCriteria")',
+            data: { strRiskCriteria: RiskCriteria, strAttribute: Attribute },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+    function GetActionItemsByRCDescription(RiskCriteriaDescription) {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("GetActionItemsByRCDescription", "RiskCriteria")',
+            data: { RiskCriteriaDescription: RiskCriteriaDescription },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetMitigationByRCDescription(RiskCriteriaDescription) {
+        var result = null;
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("GetMitigationByRCDescription", "RiskCriteria")',
+            data: { RiskCriteriaDescription: RiskCriteriaDescription },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetActionItemsbyQuestionId(QuestionId) {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetActionItemsbyQuestionId", "Questions")',
+            data: { strQuestionID: QuestionId },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetMitigationbyQuestionId(QuestionId) {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetMitigationbyQuestionId", "Questions")',
+            data: { strQuestionID: QuestionId },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+
+    $("#ddlImpact").kendoDropDownList();
+    $("#ddlRiskCriteriaDescription").kendoDropDownList();
+    $("#ddlConfirmationComplience").kendoDropDownList();
+
+
+    $("#ddlActionItems").kendoMultiSelect({
+        dataSource: [],
+        dataValueField: "RCActionItemId",
+        dataTextField: "ActionItem",
+        index: 0,
+        optionLabel: "--Select Action Items--",
+    }).data("kendoMultiSelect");
+
+    $("#ddlMitigation").kendoMultiSelect({
+        dataSource: [],
+        dataValueField: "RCMitigationId",
+        dataTextField: "Mitigation",
+        index: 0,
+        optionLabel: "--Select Mitigation--",
+    }).data("kendoMultiSelect");
+
+    $("#ddlRiskCriteria").change(function () {
+
+        $("#ddlImpact").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "RiskCriteriaId",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Impact--"
+        });
+
+        $("#ddlRiskCriteriaDescription").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "RiskCriteriaId",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Risk Criteria Description--"
+        });
+
+        $("#ddlConfirmationComplience").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "RiskCriteriaId",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Confirmation Of Compliance--"
+        });
+
+        var dataImpact = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Impact");
+        $("#ddlImpact").data("kendoDropDownList").setDataSource(dataImpact);
+
+        var dataRiskCriteria = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Risk Criteria Description");
+        $("#ddlRiskCriteriaDescription").data("kendoDropDownList").setDataSource(dataRiskCriteria);
+
+        var dataConfirmationOfComplianceImprovement = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Confirmation Of Compliance Improvement");
+        $("#ddlConfirmationComplience").data("kendoDropDownList").setDataSource(dataConfirmationOfComplianceImprovement);
+
+        //var dataMitigation = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Mitigation");
+        //$("#ddlMitigation").data("kendoMultiSelect").setDataSource(dataMitigation);
+        //$("#ddlMitigation").data().kendoMultiSelect.value([]);
+
+        $("#ddlActionItems").data("kendoMultiSelect").setDataSource([]);
+        $("#ddlActionItems").data().kendoMultiSelect.value([]);
+    });
+
+    $("#ddlRiskCriteriaDescription").change(function () {
+        var dataActionItems = GetActionItemsByRCDescription($(this).data("kendoDropDownList").text(), "Action Items");
+        $("#ddlActionItems").data("kendoMultiSelect").setDataSource(dataActionItems);
+        $("#ddlActionItems").data().kendoMultiSelect.value([]);
+
+        var dataMitigation = GetMitigationByRCDescription($(this).data("kendoDropDownList").value());
+        $("#ddlMitigation").data("kendoMultiSelect").setDataSource(dataMitigation);
+        $("#ddlMitigation").data().kendoMultiSelect.value([]);
+    });
+
+    var vDdlSections = $("#ddlSections").kendoDropDownList({
+        dataValueField: "SectionId",
+        dataTextField: "SectionName",
+        dataSource: GetSections(),
+        index: 0,
+        optionLabel: "--Select Sections--"
+    }).data("kendoDropDownList");
+
+    var vDdlSections = $("#ddlChangeSection").kendoDropDownList({
+        dataValueField: "SectionId",
+        dataTextField: "SectionName",
+        dataSource: [],
+        index: 0,
+        optionLabel: "--Select Sections--"
+    }).data("kendoDropDownList");
+
+    var vOldSectionId = 0;
+
+    function EditQuestionData(QuestionID) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetQuestions", "Questions")',
+            data: { strQuestionID: QuestionID },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#addQuestionModal').modal('toggle');
+                    $("#divddlChangeSection").show();
+                    $("#divlblSection").hide();
+                    $("#ddlChangeSection").attr("required", "required");
+                    $("#hdnQuestionId").val(data[0].QuestionId);
+                    $("#txtQuestionNum").val(data[0].QuestionNumber);
+                    $("#ddlProbability").data("kendoDropDownList").value(data[0].Probability);
+                    $("#ddlSeverity").data("kendoDropDownList").value(data[0].Severity);
+                    $("#ddlDetectability").data("kendoDropDownList").value(data[0].Detectability);
+                    $("#ddlRiskCriteria").data("kendoDropDownList").value(data[0].RiskCriteria);
+                    $("#ddlRiskCriteria").trigger('change');
+                    $("#ddlRiskCriteriaDescription").data("kendoDropDownList").value(data[0].RiskCriteriaDescription);
+                    $("#ddlImpact").data("kendoDropDownList").value(data[0].Impact);
+                    $("#ddlConfirmationComplience").data("kendoDropDownList").value(data[0].ConfirmationOfCompliance);
+                    var questionText = data[0].Question;
+                    var decoded = $('<textarea />').html(questionText).text();
+                    $("#txtQuestion").data("kendoEditor").value(decoded);
+                    var instructions = data[0].Instructions;
+                    var intsdecoded = $('<textarea />').html(instructions).text();
+                    $("#txtInstructions").data("kendoEditor").value(intsdecoded);
+                    $("#ddlRiskCriteriaDescription").trigger('change');
+                    var vActionItems = [];
+                    var vActionItems = GetActionItemsbyQuestionId(QuestionID);
+                    $("#ddlActionItems").data("kendoMultiSelect").value(vActionItems);
+                    var vMitigation = [];
+                    var vActionItems = GetMitigationbyQuestionId(QuestionID);
+                    $("#ddlMitigation").data("kendoMultiSelect").value(vActionItems);
+                    var vAssessmentTypeId = data[0].AssessmentTypeId;
+                    vOldSectionId = data[0].SectionId;
+                    $("#ddlChangeSection").data("kendoDropDownList").setDataSource(GetSections(vAssessmentTypeId));
+                    $("#ddlChangeSection").data("kendoDropDownList").value(data[0].SectionId);
+                }
+            }
+        });
+    }
+
+    function DeleteQuestion(QuestionID) {
+        if (QuestionID != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/Questions/DeleteQuestion?QuestionId=" + QuestionID;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetQuestionsBySectionId($("#ddlSections").val());
+                        if ("@LoggedInUser.UserType" == "A") {
+                            $('#divGridAdmin').data("kendoGrid").dataSource.data(gridData);
+                        }
+                        else {
+                            $('#divGridUser').data("kendoGrid").dataSource.data(gridData);
+                        }
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $("#idQuestions").addClass('active');
+        validator = $("#divAddQuestion").kendoValidator().data("kendoValidator");
+        $("#addQuestionModal").on("hide.bs.modal", function () {
+            $("#panelbar").data("kendoPanelBar").expand($("#liQuestions"));
+            //$("#panelbar").data("kendoPanelBar").collapse($("#liSeverity"));
+            //$("#panelbar").data("kendoPanelBar").collapse($("#liRiskCriteria"));
+        })
+        $("#btnaddQuestionModal").click(function () {
+            $("#ddlSections").attr("required", "required")
+            $("#ddlAssessmentTypes").attr("required", "required")
+            if (validator.validate()) {
+                $('#addQuestionModal').modal('toggle');
+                $("#divlblSection").show();
+                $("#txtQuestionNum").val("");
+                $("#txtQuestion").data("kendoEditor").value("");
+                $("#ddlProbability").data("kendoDropDownList").value("");
+                $("#ddlSeverity").data("kendoDropDownList").value("");
+                $("#ddlDetectability").data("kendoDropDownList").value("");
+                $("#hdnQuestionId").val("");
+                $("#txtInstructions").data("kendoEditor").value("");
+                $("#ddlRiskCriteria").data("kendoDropDownList").value("");
+                $("#ddlRiskCriteria").trigger('change');
+                $("#ddlRiskCriteriaDescription").data("kendoDropDownList").value("");
+                $("#ddlImpact").data("kendoDropDownList").value("");
+                $("#ddlConfirmationComplience").data("kendoDropDownList").value("");
+                $("#ddlMitigation").data("kendoMultiSelect").value("");
+                $("#ddlRiskCriteriaDescription").trigger('change');
+                $("#ddlActionItems").data("kendoMultiSelect").value("");
+                $("#ddlChangeSection").data("kendoDropDownList").value("");
+                $("#ddlChangeSection").removeAttr("required");
+                //$("#ddlConfirmationComplience").data("kendoDropDownList").dataSource.data("");
+                //$("#ddlMitigation").data("kendoDropDownList").dataSource.data("");
+                $("#divddlChangeSection").hide();
+            }
+        });
+
+
+        $("#ddlSeverity").kendoDropDownList({
+            dataSource: [
+                { Severity: "No Risk", SeverityValue: "1" },
+                { Severity: "Low Risk", SeverityValue: "2" },
+                { Severity: "Low to Moderate Risk", SeverityValue: "3" },
+                { Severity: "Moderate Risk", SeverityValue: "4" },
+                { Severity: "Moderate to Severe Risk", SeverityValue: "5" },
+                { Severity: "Severe Risk", SeverityValue: "6" }
+            ],
+            dataValueField: "SeverityValue",
+            dataTextField: "Severity",
+            index: 0,
+            optionLabel: "--Select Severity--",
+        }).data("kendoDropDownList");
+
+        $("#ddlProbability").kendoDropDownList({
+            dataSource: [
+                { Probability: "None", ProbabilityValue: "1" },
+                { Probability: "Rare", ProbabilityValue: "2" },
+                { Probability: "Unlikely", ProbabilityValue: "3" },
+                { Probability: "Possible", ProbabilityValue: "4" },
+                { Probability: "Likely", ProbabilityValue: "5" },
+                { Probability: "Almost Certain", ProbabilityValue: "6" }
+            ],
+            dataValueField: "ProbabilityValue",
+            dataTextField: "Probability",
+            index: 0,
+            optionLabel: "--Select Probability--",
+        }).data("kendoDropDownList");
+
+        $("#ddlDetectability").kendoDropDownList({
+            dataSource: [
+                { Detectability: "Almost Certain", DetectabilityValue: "1" },
+                { Detectability: "Moderately High", DetectabilityValue: "2" },
+                { Detectability: "Low", DetectabilityValue: "3" },
+                { Detectability: "Remote", DetectabilityValue: "4" },
+                { Detectability: "Absolute Uncertain", DetectabilityValue: "5" },
+            ],
+            dataValueField: "DetectabilityValue",
+            dataTextField: "Detectability",
+            index: 0,
+            optionLabel: "--Select Detectability--",
+        }).data("kendoDropDownList");
+
+        $("#txtQuestion").kendoEditor({
+            resizable: true,
+            tools: [{ name: "customTemplate", template: $("#editorTooltip-template").html() }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "justifyFull", "insertUnorderedList", "insertOrderedList", "indent", "outdent", "createLink", "unlink", "subscript", "superscript", "createTable", "addRowAbove", "addRowBelow", "addColumnLeft", "addColumnRight", "deleteRow", "deleteColumn", "formatting", "foreColor", "backColor"]
+        });
+
+        $("#txtInstructions").kendoEditor({
+            resizable: true,
+            tools: [{ name: "customTemplate", template: $("#editorTooltip-template").html() }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "justifyFull", "insertUnorderedList", "insertOrderedList", "indent", "outdent", "createLink", "unlink", "subscript", "superscript", "createTable", "addRowAbove", "addRowBelow", "addColumnLeft", "addColumnRight", "deleteRow", "deleteColumn", "formatting", "fontName", "fontSize", "foreColor", "backColor"]
+        });
+        //Risk Criteria topic
+        var vDdlSections = $("#ddlRiskCriteria").kendoDropDownList({
+            dataSource: GetRiskCriteria(),
+            dataValueField: "RiskCriteriaId",
+            dataTextField: "RiskCriteria",
+            index: 0,
+            optionLabel: {
+                RiskCriteria: "--Select Risk Criteria--"
+            }
+        }).data("kendoDropDownList");
+
+        //Tooltip click functionality
+        $("#idEditorTooltip").live("click", function () {
+            $("#idTooltipPopupWindow").data("kendoWindow").center().open();
+        });
+
+        // Insert Tooltip Text
+        $("#insertEditorTooltipButton").live("click", function () {
+
+            var editorId = $("#idHidden_tooltipId").val();
+
+            var editor = $("#txtQuestion").data("kendoEditor");
+            var data = "<span>&nbsp;</span><span style='border-bottom:1px dotted;' title='" + $('#idEditorTooltipText').val() + "'>" + $('#idEditorText').val() + "</span><span>&nbsp;</span>";
+            editor.exec("inserthtml", { value: data });
+            $('#idEditorTooltipText').val(""); $('#idEditorText').val("");
+            $("#idTooltipPopupWindow").data("kendoWindow").close();
+        });
+
+        //Tooltip window
+        $("#idTooltipPopupWindow").kendoWindow({
+            width: "500px",
+            actions: ["Close"],
+            title: "Insert Tooltip Text"
+        });
+    });
+
+    $("#ddlAssessmentTypes").change(function () {
+        if ($("#ddlAssessmentTypes").val() == "") {
+            $("#ddlSections").data("kendoDropDownList").setDataSource([]);
+        }
+        var vAssessmentTypeId = $("#ddlAssessmentTypes").val();
+        if (vAssessmentTypeId != "") {
+            $("#ddlSections").data("kendoDropDownList").setDataSource(GetSections(vAssessmentTypeId));
+        }
+        if ("@LoggedInUser.UserType" == "A")
+            $('#divGridAdmin').hide();
+        else
+            $('#divGridUser').hide();
+    });
+
+    $("#ddlSections").change(function () {
+        $("#lblSection").text($("#ddlSections").data('kendoDropDownList').text());
+        $("#lblAssessmentType").text($("#ddlAssessmentTypes").data('kendoDropDownList').text());
+        if ("@LoggedInUser.UserType" == "A") {
+            $('#divGridAdmin').show();
+            var gridAdminQuestions = $('#divGridAdmin').kendoGrid({
+                dataSource: GetQuestionsBySectionId($("#ddlSections").val()),
+                sortable: true,
+                scrollable: false,
+                pageable: {
+                    pageSize: 10,
+                    refresh: false,
+                    pageSizes: true,
+                    buttonCount: 5
+                },
+                filterable: true,
+                columns:
+                 [
+                 {
+                     field: "QuestionID",
+                     hidden: true
+                 },
+                 {
+                     field: "QuestionNumber",
+                     title: "Question Number",
+                     width: 100
+                 },
+                 {
+                     field: "Question",
+                     title: "Question",
+                     template: "<textarea id='editor_#=QuestionId#' class='questionEditor'></textarea>"
+                 },
+                {
+                    template: "<div style='position: relative; left: 9px;'><a onClick='EditQuestionData(#=QuestionId#)'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Edit'></i></a>&nbsp;&nbsp;&nbsp;</a><a onclick='DeleteQuestion(#=QuestionId#)' style='cursor: pointer;'><i class='fa fa-trash-o' aria-hidden='true' title='Delete'></i></a></div>",
+                    title: "Action",
+                    width: 100
+                },
+                {
+                    template: "<div style='position: relative;'>#if(viewUpButton==true){#<a onClick='QuestionsSortingBySortKey(#=QuestionId#,#=SectionId#,\"UP\",#=AssessmentTypeId#)' style='cursor:pointer;'><i class='fa fa-arrow-circle-up' aria-hidden='true' title='MoveUp' style='position: absolute;left: 10px;'></i></a>#}#&nbsp;&nbsp;&nbsp;&nbsp;#if(viewDownButton==true){#<a onClick='QuestionsSortingBySortKey(#=QuestionId#,#=SectionId#,\"DOWN\",#=AssessmentTypeId#)' style='cursor:pointer;'><i class='fa fa-arrow-circle-down' aria-hidden='true' title='MoveDown' style='position: absolute;right: 33px;'></i></a>#}#</div>",
+                    title: "Sort",
+                    width: 100
+                }
+                 ],
+                dataBound: function (e) {
+                    $(".questionEditor").kendoEditor({
+                        resizable: true,
+                        tools: []
+                    });
+                    if (e.sender._data.length != 0)
+                        $($('.questionEditor').data().kendoEditor.body).attr('contenteditable', false);
+
+                    for (var i = 0; i < e.sender._data.length; i++) {
+                        var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                        $("#editor_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                    }
+                }
+            });
+        }
+        else {
+            $('#divGridUser').show();
+            var gridUserQuestions = $('#divGridUser').kendoGrid({
+                dataSource: GetQuestionsBySectionId($("#ddlSections").val()),
+                sortable: true,
+                scrollable: false,
+                pageable: {
+                    pageSize: 10,
+                    refresh: false,
+                    pageSizes: true,
+                    buttonCount: 5
+                },
+                filterable: true,
+                columns:
+                 [
+                 {
+                     field: "QuestionID",
+                     hidden: true
+                 },
+                 {
+                     field: "QuestionNumber",
+                     title: "Question Number",
+                     width: 100
+                 },
+                 {
+                     field: "Question",
+                     title: "Question",
+                     template: "<textarea id='editor_#=QuestionId#' class='questionEditor'></textarea>"
+                 },
+                 //{
+                 //    field: "Probability",
+                 //    title: "Required risk score ",
+                 //    width: 100
+                 //},
+                 {
+                     field: "Severity",
+                     title: "severity levels",
+                     width: 100
+                 },
+                 {
+                     template: "<div style='position: relative; left: 9px;'><a onClick='EditQuestionData(#=QuestionId#)'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Edit'></i></a>&nbsp;&nbsp;&nbsp;</a><a onclick='DeleteQuestion(#=QuestionId#)' style='cursor: pointer;'><i class='fa fa-trash-o' aria-hidden='true' title='Delete'></i></a></div>",
+                     title: "Action",
+                     width: 100
+                 },
+                 {
+                     template: "<div style='position: relative;'>#if(viewUpButton==true){#<a onClick='QuestionsSortingBySortKey(#=QuestionId#,#=SectionId#,\"UP\",#=AssessmentTypeId#)' style='cursor:pointer;'><i class='fa fa-arrow-circle-up' aria-hidden='true' title='MoveUp' style='position: absolute;left: 10px;'></i></a>#}#&nbsp;&nbsp;&nbsp;&nbsp;#if(viewDownButton==true){#<a onClick='QuestionsSortingBySortKey(#=QuestionId#,#=SectionId#,\"DOWN\",#=AssessmentTypeId#)' style='cursor:pointer;'><i class='fa fa-arrow-circle-down' aria-hidden='true' title='MoveDown' style='position: absolute;right: 33px;'></i></a>#}#</div>",
+                     title: "Sort",
+                     width: 100
+                 }
+                 ],
+                dataBound: function (e) {
+                    $(".questionEditor").kendoEditor({
+                        resizable: true,
+                        tools: []
+                    });
+                    if (e.sender._data.length != 0)
+                        $($('.questionEditor').data().kendoEditor.body).attr('contenteditable', false);
+
+                    for (var i = 0; i < e.sender._data.length; i++) {
+                        var decoded = $('<textarea />').html(e.sender._data[i].Question).text();
+                        $("#editor_" + e.sender._data[i].QuestionId).data("kendoEditor").value(decoded);
+                    }
+                }
+            });
+        }
+    });
+
+    //Seva Functionality
+    var frmAddQuestionvalidator = $("#frmAddQuestion").kendoValidator().data("kendoValidator");
+    $("#addQuestionModal").on("show.bs.modal", function () {
+        $("#addQuestionModal .k-tooltip-validation.k-invalid-msg").hide();
+    });
+
+
+
+    $("#btnSave").click(function () {
+        //$("#ddlActionItems").attr('required', 'required');
+        //var questionData = {
+        //    SectionId: $("#ddlSections").val(), QuestionId: $("#hdnQuestionId").val(), QuestionNumber: $("#txtQuestionNum").val(), Question: $("#txtQuestion").val(), Probability: $("#ddlProbability").val(), Severity: $("#ddlSeverity").val(), AssessmentTypeId: $("#ddlAssessmentTypes").val(), Detectability: $("#ddlDetectability").val()
+        //    , Instructions: $("#txtInstructions").val(), RiskCriteria: $("#ddlRiskCriteria").val(), RiskCriteriaDescription: $("#ddlRiskCriteriaDescription").val(), ActionItems: $("#ddlActionItems").val().toString(), Impact: $("#ddlImpact").val(), ConfirmationOfCompliance: $("#ddlConfirmationComplience").val(), Mitigation: $("#ddlMitigation").val()
+        //};       
+
+        if (frmAddQuestionvalidator.validate()) {
+            //var ActionItemsWith$$ = "";
+            //var ActionItems = $("#ddlActionItems").val();
+            //ActionItems.forEach(function (item, index, arr) {
+            //    if (index < arr.length - 1) {
+            //        ActionItemsWith$$ = item + "$$" + ActionItemsWith$$;
+            //    }
+            //    else {
+            //        ActionItemsWith$$ += item;
+            //    }
+            //});
+            var vSection = "";
+            if ($("#ddlChangeSection").val() == null || $("#ddlChangeSection").val() == "") {
+                vSection = $("#ddlSections").val();
+            }
+            else {
+                vSection = $("#ddlChangeSection").val();
+            }
+            var questionData = {
+                SectionId: vSection, QuestionId: $("#hdnQuestionId").val(), QuestionNumber: $("#txtQuestionNum").val(), Question: $("#txtQuestion").val(), Probability: $("#ddlProbability").val(), Severity: $("#ddlSeverity").val(), AssessmentTypeId: $("#ddlAssessmentTypes").val(), Detectability: $("#ddlDetectability").val()
+          , Instructions: $("#txtInstructions").val(), RiskCriteria: $("#ddlRiskCriteria").val(), RiskCriteriaDescription: $("#ddlRiskCriteriaDescription").val(), ActionItems: $("#ddlActionItems").val(), Impact: $("#ddlImpact").val(), ConfirmationOfCompliance: $("#ddlConfirmationComplience").val(), Mitigation: $("#ddlMitigation").val(), OldSectionId: vOldSectionId
+            };
+
+            $.ajax({
+                async: false,
+                type: 'POST',
+                traditional: true,
+                url: '@Url.Action("AddUpdateQuestion", "Questions")',
+                data: questionData,
+                success: function (response) {
+                    if (response.toLowerCase().indexOf("success") != -1) {
+                        $('#spanSuccesMessage').text(response);
+                        $("#divSuccesMessage").show();
+                        $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                    }
+                    else if (response.toLowerCase().indexOf("unable") != -1) {
+                        $('#spanErrorMessage').text(response);
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                    else {
+                        $('#spanErrorMessage').text(response);
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+
+                    $('#addQuestionModal').modal('hide');
+                    $("#hdnSectionId").val("");
+                    $("#hdnQuestionId").val("");
+                    $("#txtQuestionNum").val("");
+                    $("#txtQuestion").data("kendoEditor").value("");
+                    $("#ddlProbability").data("kendoDropDownList").value("");
+                    $("#ddlSeverity").data("kendoDropDownList").value("");
+                    $("#ddlDetectability").data("kendoDropDownList").value("");
+                    $("#txtInstructions").data("kendoEditor").value("");
+                    $("#ddlRiskCriteria").data("kendoDropDownList").value("");
+                    $("#ddlRiskCriteriaDescription").data("kendoDropDownList").value("");
+                    $("#ddlActionItems").data("kendoMultiSelect").value("");
+                    $("#ddlImpact").data("kendoDropDownList").value("");
+                    $("#ddlConfirmationComplience").data("kendoDropDownList").value("");
+                    $("#ddlMitigation").data("kendoMultiSelect").value("");
+                    $("#ddlChangeSection").data("kendoDropDownList").value("");
+                    var gridData = GetQuestionsBySectionId($("#ddlSections").val());
+                    if ("@LoggedInUser.UserType" == "A") {
+                        $('#divGridAdmin').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#divGridUser').data("kendoGrid").dataSource.data(gridData);
+                    }
+                }
+            });
+        }
+    });
+    //$("#panelbar").kendoPanelBar();
+
+
+    $("#panelbar").kendoPanelBar({
+
+        expandMode: "single"
+        //select: onSelect,
+        //expand: onExpand,
+        //collapse: onCollapse,
+        //activate: onActivate,
+        //contentLoad: onContentLoad,
+        //error: onError
+        // contentUrls: [, , , "../content/web/panelbar/ajax/ajaxContent1.html", "error.html"]
+    });
+
+
+
+</script>
+
+<script type="text/x-kendo-template" id="editorTooltip-template">
+    <a href="javascript:void(0)" id="idEditorTooltip" title="Insert Text with Tooltip">  <i class='fa fa-comment-o fa-lg '></i> </a>
+</script>
+
+
+
+<style>
+    .edit-area-height td.k-editable-area {
+        height: 100px;
+    }
+
+    .edit-area-height1 td.k-editable-area {
+        height: 100px;
+    }
+
+    .edit-area-height1 td.k-editor-toolbar-wrap {
+        height: 50px;
+    }
+
+    .edit-area-height1 table.k-editor {
+        height: 190px;
+    }
+
+    .edit-area-height table.k-editor {
+        height: 120px;
+    }
+</style>
+
+
+

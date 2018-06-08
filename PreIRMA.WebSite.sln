@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreIRMA.WebSite", "PreIRMA.WebSite\PreIRMA.WebSite.csproj", "{FBA82DDA-84A7-49A4-8241-580D62781B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreIRMA.BAL", "PreIRMA.BAL\PreIRMA.BAL.csproj", "{1C29143A-1248-4F64-9A9E-44530BB00996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreIRMA.DAL", "PreIRMA.DAL\PreIRMA.DAL.csproj", "{4A1F7B71-7F81-42DB-A252-EE1592FE7417}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreIRMA.DataContract", "PreIRMA.DataContract\PreIRMA.DataContract.csproj", "{880717CF-9FB6-46E2-8C7A-C082F6C22219}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBA82DDA-84A7-49A4-8241-580D62781B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBA82DDA-84A7-49A4-8241-580D62781B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBA82DDA-84A7-49A4-8241-580D62781B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBA82DDA-84A7-49A4-8241-580D62781B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C29143A-1248-4F64-9A9E-44530BB00996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C29143A-1248-4F64-9A9E-44530BB00996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C29143A-1248-4F64-9A9E-44530BB00996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C29143A-1248-4F64-9A9E-44530BB00996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A1F7B71-7F81-42DB-A252-EE1592FE7417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A1F7B71-7F81-42DB-A252-EE1592FE7417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A1F7B71-7F81-42DB-A252-EE1592FE7417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A1F7B71-7F81-42DB-A252-EE1592FE7417}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880717CF-9FB6-46E2-8C7A-C082F6C22219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880717CF-9FB6-46E2-8C7A-C082F6C22219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880717CF-9FB6-46E2-8C7A-C082F6C22219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880717CF-9FB6-46E2-8C7A-C082F6C22219}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal

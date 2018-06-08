@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "AddRiskCriteria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("AddRiskCriteria", "RiskCriteria", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddRiskCriteria" }))
+{
+    <div id="tabstrip3" style="margin-top: 20px; margin-bottom: 50px; display: none">
+        <ul>
+            <li class="k-state-active" id="tab1">Risk Criteria </li>
+            <li id="tab2">Risk Criteria Attribute</li>
+        </ul>
+        <div>
+            <div class="row" style="margin: 20px 0;">
+                <label class="control-label col-md-2" style="padding: 0px;">Risk Criteria :</label>
+                <div class="col-md-7">
+                    <textarea id="txtRiskCriteria" name="txtRiskCriteria" tabindex="1" class="form-control text-area1" data-required-msg="Please enter description" placeholder="Enter Description"></textarea>
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-info btn-sm" id="btnAddRiskCriteria" name="btnAddRiskCriteria" value="Add Risk Criteria" style="margin: 10px 0px 0 31px;" />
+                    <a href="/RiskCriteria/ViewRiskCriteria" class="btn btn-default btn-sm" style="margin: 10px 0px 0 15px;">Cancel</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <input type="hidden" name="hdnRiskCriteria" id="hdnRiskCriteria" />
+                <div class="col-md-12">
+                    <div>
+                        <label class="control-label col-md-2 " style="padding: 0px;">Risk Criteria :</label>
+                        <div class="col-md-4">
+                            <select id="ddlRiskCriteria" name="ddlRiskCriteria" class="fullWidth" data-required-msg="Please select risk criteria"></select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="control-label col-md-1" style="padding: 0px;">Attribute :</label>
+                        <div class="col-md-4">
+                            <select id="ddlAttribute" name="ddlAttribute" class="fullWidth" data-required-msg="Please select attribute"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="margin-top: 30px;">
+                    <label class="control-label col-md-2" style="padding-top: 10px;">Attribute Description:</label>
+                    <div class="col-md-7">
+                        <textarea id="txtAttributeDescription" name="txtAttributeDescription" class="form-control text-area2" data-required-msg="Please enter attribute description" placeholder="Enter Description"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-info btn-sm col-md-1" id="btnAddAttribute" name="btnAddAttribute" value="Add Attribute" style="margin: 10px 0px 0 38px;" />
+                    <a href="/RiskCriteria/ViewRiskCriteria?activeTab=1" class="btn btn-default btn-sm" style="margin: 10px 0px 0 15px;">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+
+    if ("@TempData["activetab"]" == "2") {
+
+        $('#tab1').removeClass('k-state-active');
+        $('#tab2').addClass('k-state-active');
+    }
+    if ("@TempData["activetab"]" == "1") {
+
+        $('#tab1').addClass('k-state-active');
+        $('#tab2').removeClass('k-state-active');
+    }
+
+    $("#tab1").click(function () {
+        $("#txtRiskCriteria").val("");
+        $(".k-widget.k-tooltip.k-tooltip-validation.k-invalid-msg ").hide();
+    });
+    $("#tab2").click(function () {
+        $("#txtAttributeDescription").val("");
+        $(".k-widget.k-tooltip.k-tooltip-validation.k-invalid-msg ").hide();
+    });   
+    /**Get Risk Criteria**/
+    function GetRiskCriteria() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaByAttributeType", "RiskCriteria")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+    $(document).ready(function () {
+        $("#tabstrip3").show();
+        $("#riskCriteriaLink").addClass('active');
+        $("#tabstrip3").kendoTabStrip({});
+        var validator = $("#frmAddRiskCriteria").kendoValidator({
+            rules: {
+                customRule1: function (input) {
+                    if (input.is("[name=txtRiskCriteria]")) {                       
+                        var reg = /[<,>]/g;
+                        return !reg.test($('[name="txtRiskCriteria"]').val());
+                    }
+                    return true;
+                },
+                customRule2: function (input) {
+                    if (input.is("[name=txtAttributeDescription]")) {                       
+                        var reg = /[<,>]/g;
+                        return !reg.test($('[name="txtAttributeDescription"]').val());
+                    }
+                    return true;
+                }
+            },
+            messages: {
+                customRule1: "Please enter valid risk criteria",
+                customRule2: "Please enter valid attribute description"
+            }
+        }).data("kendoValidator");
+
+        // Add Risk Criteria Seva click
+        $("#btnAddRiskCriteria").click(function () {
+            $("#txtRiskCriteria").attr("required", "required");
+            $("#ddlRiskCriteria").removeAttr("required");
+            $("#ddlAttribute").removeAttr("required");
+            $("#txtAttributeDescription").removeAttr("required");
+            if (validator.validate()) {
+                $("#btnAddRiskCriteria").val($(this).val());
+                $("#frmAddRiskCriteria").submit();
+            }
+        });
+
+        // Add Risk Criteria Seva click
+        $("#btnAddAttribute").click(function () {
+            $("#txtRiskCriteria").removeAttr("required");
+            $("#ddlRiskCriteria").attr("required", "required");
+            $("#ddlAttribute").attr("required", "required");
+            $("#txtAttributeDescription").attr("required", "required");
+            if (validator.validate()) {
+                $("#ddlAttribute").data("kendoDropDownList").text();
+                $("#hdnRiskCriteria").val($("#ddlRiskCriteria").data("kendoDropDownList").text());
+                $("#frmAddRiskCriteria").submit();
+            }
+        });
+
+        // Risk Criteria Drop DownList
+        var vDdlSections = $("#ddlRiskCriteria").kendoDropDownList({
+            dataSource: GetRiskCriteria(),
+            dataValueField: "RiskCriteriaId",
+            dataTextField: "RiskCriteria",
+            index: 0,
+            optionLabel: "--Select Risk Criteria--",
+        }).data("kendoDropDownList");
+
+        var data = [{ RiskCriteriaId: "1", AttributeName: "Impact" },
+                    { RiskCriteriaId: "2", AttributeName: "Confirmation Of Compliance Improvement" },
+                    { RiskCriteriaId: "3", AttributeName: "Risk Criteria Description" }];
+
+        var vDdlSections = $("#ddlAttribute").kendoDropDownList({
+            dataSource: data,
+            dataValueField: "AttributeId",
+            dataTextField: "AttributeName",
+            index: 0,
+            optionLabel: "--Select Attribute--",
+        }).data("kendoDropDownList");
+    });
+</script>
+
+<style>
+    /*a.k-button.k-button-icontext.k-grid-excel {
+        float: right;
+        background-color: #ccc;
+    }
+
+    .k-button:focus:active:not(.k-state-disabled):not([disabled]) {
+        box-shadow: inherit;
+    }
+
+    .k-button:active:hover, .k-button.k-state-active:hover {
+        border-color: transparent;
+    }*/
+    /*div#tabstrip3-1 {
+        height: 90px;
+    }
+    div#tabstrip3-2 {
+        height:150px;
+    }*/
+    div#tabstrip3-2 {
+        padding: 25px 0;
+    }
+</style>
+
+

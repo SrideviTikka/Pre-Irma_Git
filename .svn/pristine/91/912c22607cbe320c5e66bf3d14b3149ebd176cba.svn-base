@@ -1,0 +1,220 @@
+﻿@using System.Web.Optimization;
+@using PreIRMA.DataContract
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="/Images/favicon.ico" rel="icon" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/Images/favicon.ico">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/Bootstrap/bootstrap.min.css")
+    @Styles.Render("~/Content/Bootstrap/bootstrap-tagsinput.css")
+    @Styles.Render("~/Content/themes/base/jquery-ui.css")
+    @Styles.Render("~/Content/kendo/kendo.common.min.css")
+    @Styles.Render("~/Content/kendo/kendo.default.min.css")
+    @Styles.Render("~/Content/kendo/kendo.dataviz.min.css")
+    @Styles.Render("~/Content/kendo/kendo.dataviz.default.min.css")
+    @Styles.Render("~/Content/Rat/font-awesome.min.css")
+    @*@Styles.Render("~/Content/Rat/Custom.css")*@
+
+    @Styles.Render("~/Content/Rat/rat.css")
+    @Styles.Render("~/Content/Rat/animate.css")
+    @Styles.Render("~/Content/Rat/helper.css")
+    @Styles.Render("~/Content/Rat/waves-effect.css")
+
+    @Scripts.Render("~/Scripts/jquery-1.11.1.min.js")
+    @Scripts.Render("~/Scripts/jquery-migrate-1.2.1.js")
+    @Scripts.Render("~/Scripts/Kendo/kendo.all.min.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    @Scripts.Render("~/Scripts/jquery.tmpl.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-tagsinput-emails.js")
+    @Scripts.Render("~/Scripts/jquery-ui-1.10.3.custom.min.js")
+    @Scripts.Render("~/Scripts/jquery.infinitescroll.min.js")
+    @Scripts.Render("~/Scripts/Rat/FileSaver.js")
+    @Scripts.Render("~/Scripts/Rat/jquery.wordexport.js")
+    @Scripts.Render("~/Scripts/Rat/Html2Canvas.js")
+    @Scripts.Render("~/Scripts/Rat/Rat.js")
+    @Scripts.Render("~/Scripts/Rat/waves.js")
+    <script src="http://kendo.cdn.telerik.com/2017.3.1026/js/jszip.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+
+
+        @{if (Session["UserLogon"] != null)
+          {
+              DCUsers objDCUsers = (DCUsers)Session["UserLogon"];
+              
+            <header class="navbar-fixed-top">
+                <div class="col-md-12">
+                    <div class="row header">
+                        <div>
+                            <div class="col-md-12">
+                                <div class="text-center main-logo">
+                                    <a class="col-md-2" href="#">
+                                        <img src="/Images/Anvesh_logo.png" alt="logo" /></a>
+                                    <a class="col-md-9" href="#">
+                                        <img src="/Images/logohome.png" alt="logo" />
+                                        <span style="color: #000000;">IRMA</span><span style="color: #000000;">- OnBoarding </span></a>
+                                    <div class="col-md-1">
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle pull-right" data-toggle="dropdown">
+                                                <img class="editProfile thumb-md img-circle" id="imgUser" src="/Images/profile0.png" style="height: 50px; width: 50px;" />
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <div class="media m-b-5 col-md-12">
+                                                    <a class="pull-left m-l-10" href="#">
+
+                                                        @if (TempData["ImageKey"] != null)
+                                                        { 
+                                                            <img class="editProfile thumb-md img-circle" id="imgUser" src="data:image/png;base64,@Convert.ToBase64String((byte[])TempData["UserImage"])" style="height: 50px; width: 50px;" /> 
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="editProfile thumb-md img-circle" id="imgUser" src="/Images/profile0.png" style="height: 50px; width: 50px;" /> 
+                                                        }
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h4 class="media-head"><span id="layoutUserName">@objDCUsers.FirstName @objDCUsers.LastName</span></h4>
+                                                        <p class="media-mail"><span id="layoutUserEmail" style="display: block; margin: 10px 0 15px 0;">@objDCUsers.EmailAddress</span></p>
+
+                                                        @*<a href="@Url.Content("~/Manage/EditProfile")" class="btn btn-sm btn-primary waves-effect waves-light" style="font-size:12px;line-height:15px;">Account</a>*@
+                                                        <a href="@Url.Action("Logout", "Account")" class="btn btn-sm btn-default waves-effect waves-light" style="font-size:12px;line-height:15px;float:right">Logout</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </header>
+              
+                                                        if (objDCUsers.UserType == UserType.A)
+                                                        {
+            <div class="row users">
+                <div class="col-md-12">                   
+                    <a class="col-md-1" href="/RiskCriteria/ViewRiskCriteria" id="riskCriteriaLink" style="margin-left: 150px;">Risk Criteria</a>
+                    <a class="col-md-offset-1 col-md-1" href="/Sections/ViewSections" id="sectionsLink">Sections</a>
+                    <a class="col-md-offset-1 col-md-1" href="/Questions/ViewQuestions" id="questionsLink">Questions</a>
+                    @*<a class="col-md-offset-1 col-md-1" href="/CAPADetails/ViewCapaDetails" id="capaDetailsLink">CAPA</a>*@
+                    <a class="col-md-offset-1 col-md-1" href="/SDVDetails/ViewSDVDetails" id="SDVLink">SDV</a>
+                    <a class="col-md-offset-1 col-md-1" href="/User/ViewUsers" id="usersLink">Clients</a>
+
+                </div>
+            </div>
+                                                        }
+                                                        else
+                                                        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="nav-bar">
+                        <nav>
+                            <ul style="display: block;float: left;width: 100%;padding-left: 70px;">
+                                <li><a href="/ClientInfo/AddUpdateClientInfo" id="idClientInfo"><span>1</span> Client Info</a></li>
+                                <li><a href="/Sections/ViewSections" id="idSections"><span>2</span> Sections</a></li>
+                                <li><a href="/Questions/ViewQuestions" id="idQuestions"><span>3</span> Questions</a></li>
+                                @*<li><a href="/CAPADetails/ViewCapaDetails" id="idCapa"><span>4</span> Capa</a></li>*@
+                                <li><a href="/SDVDetails/ViewSDVDetails" id="idSDV"><span>4</span> SDV</a></li>
+                                @*<li><a href="#"><span>6</span> Review & Submit</a></li>*@
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+                                                        }
+          }
+        }
+
+        <div class="col-lg-6 col-md-6 col-sm-6 hidden-xs">
+            <div class="alert alert-remove" id="idErrorMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none"></div>
+            <div class="alert alert-ok" id="idSuccesMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none"></div>
+            @{
+                <div class="alert alert-remove" id="divErrorMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none; background: #e33915; color: #fff; min-width: 20%;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-times fa-stack-1x fa-inverse" style="color: #e33915;"></i>
+                    </span>
+                    <span id="spanErrorMessage">
+                        @if (@TempData["errorMessage"] != null)
+                        {
+                            @TempData["errorMessage"]
+                        }
+                    </span>
+                </div>                          
+                            
+                <div class="alert alert-ok" id="divSuccesMessage" style="top: 3px; position: fixed; z-index: 9999; left: 41%; display: none; background: #008000; color: #fff; min-width: 20%;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-check fa-stack-1x fa-inverse" style="color: #008000;"></i>
+                    </span>
+                    <span id="spanSuccesMessage">
+                        @if (@TempData["successMessage"] != null)
+                        {
+                            @TempData["successMessage"]
+                        }
+                    </span>
+                </div>
+            }
+        </div>
+
+        <div>
+            @*<div class="spinner" style="position: absolute; left: 51%; top: 50%; z-index: 9999;"><i class="fa fa-refresh fa-spin fa-4x" style="color: #337ab7;"></i></div>*@
+            @RenderBody()
+            @RenderSection("scripts", required: false)
+        </div>
+
+        <div class="row footer">
+            <div class="col-md-12">
+                <p> &copy; @DateTime.Now.Year  All Rights Reserved</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        if ($('#spanSuccesMessage').text().trim() != '') {
+            $("#divSuccesMessage").show();
+            $('#divSuccesMessage').delay(4000).fadeOut('slow');
+        }
+        if ($('#spanErrorMessage').text().trim() != '') {
+            $("#divErrorMessage").show();
+            $('#divErrorMessage').delay(4000).fadeOut('slow');
+        }
+        var url = window.location.pathname,
+         urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+        $('.users a').each(function () {
+            if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
+                $(this).addClass('active');
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .active {
+        background-color: #169dc9 !important;
+        color: white !important;
+        box-shadow: 0px 5px 15px #ccc;
+    }
+</style>

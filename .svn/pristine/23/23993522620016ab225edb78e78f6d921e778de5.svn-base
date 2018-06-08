@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "frmLogin" }))
+{
+    <div class="loginBox clearfix animated flipInY">
+        <div class="page-icon animated bounceInDown">
+            <img alt="Login" src="/Images/logologin.png" class="img-responsive">
+        </div>
+        <div class="login-logo">
+            <a href="#"><span style="color: #00b050;">IRMA </span><span style="color: #000000;">- OnBoarding </span><span style="font-size: 15px;">@System.Configuration.ConfigurationManager.AppSettings["Version"]</span></a>
+            @*<div style="color: red">@TempData["errorMessageLogin"]</div>*@
+        </div>
+        <div class="login-form">
+            <div class="form-group input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="email" name="txtEmailAddress" id="txtEmailAddress" placeholder="Email Address" class="form-control" required data-required-msg="Please enter email address" validationMessage="Please enter valid input " />
+            </div>
+            <div class="form-group input-group">
+                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                <input type="password" name="txtPassword" id="txtPassword" placeholder="Password" class="form-control" required data-required-msg="Please enter password" validationMessage="Please enter valid input " />
+            </div>
+            <div class="form-group clearfix">
+                <div>
+                    <a href='@Url.Action("ForgotPassword", "Account")' class="pull-right">Forgot password?</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="m-b-30 m-t-30">
+            <div style="width: 200px; margin: auto;">
+                @*<input type="hidden" id="hdnPurl" value="@TempData["purl"]" />*@
+                <button class="btn btn-primary btn-block btn-rounded waves-light waves-effect" name="btnLogin" id="btnLogin" type="submit" value="Login">Login</button>
+            </div>
+        </div>
+    </div>
+}
+<script>
+
+    var validator = $("#frmLogin").kendoValidator().data("kendoValidator");
+
+    $("#btnLogin").click(function () {
+        if(Validator.validate())
+            $("#frmLogin").submit();
+    });
+
+</script>

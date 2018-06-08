@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "ForgotPassword";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+@{Html.BeginForm("ForgotPassword", "Account", FormMethod.Post, new { id = "frmForgotPassword" });
+  
+    <div class="col-md-5 col-md-offset-4" style="margin-top: 200px;">
+        <div class="col-lg-6 col-md-6 col-sm-6 hidden-xs">
+            <div class="alert alert-remove" id="idErrorMessage" style="top: 3px; position: fixed; z-index: 1; left: 41%; display: none"></div>
+            <div class="alert alert-ok" id="idSuccesMessage" style="top: 3px; position: fixed; z-index: 1; left: 41%; display: none"></div>
+            @{
+                <div class="alert alert-remove" id="divErrorMessage" style="top: 3px; position: fixed; z-index: 1; left: 41%; display: none">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-times fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <span id="spanErrorMessage">
+                        @if (@TempData["errorMessage"] != null)
+                        {
+                            @TempData["errorMessage"]
+                        }
+                    </span>
+                </div>                          
+                            
+                <div class="alert alert-ok" id="divSuccesMessage" style="top: 3px; position: fixed; z-index: 1; left: 41%; display: none">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <span id="spanSuccesMessage">
+                        @if (@TempData["successMessage"] != null)
+                        {
+                            @TempData["successMessage"]
+                        }
+                    </span>
+                </div>
+            }
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title">Forgot Password</h4>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                <input type="email" name="txtEmailAddress" id="txtEmailAddress" required data-required-msg="Please enter email address" class="form-control k-invalid" placeholder="Please enter email address" />
+                            </div>
+                            <div class="form-group">
+                                <div class="button-login" style="margin-top: 10px;">
+                                    <button type="submit" class="btn btn-primary waves-light waves-effect" id="btnSubmit" name="btnSubmit" value="Submit">Submit</button>
+                                    <a class="btn btn-default waves-light waves-effect" href='@Url.Action("Login", "Account")'>Cancel</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clerfix"></div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($('#spanSuccesMessage').text().trim() != '') {
+            $("#divSuccesMessage").show();
+            $('#divSuccesMessage').delay(3000).fadeOut('slow');
+        }
+        if ($('#spanErrorMessage').text().trim() != '') {
+            $("#divErrorMessage").show();
+            $('#divErrorMessage').delay(3000).fadeOut('slow');
+        }
+        $('#btnSubmit').click(function () {
+            $("#frmForgotPassword").kendoValidator();
+        });
+    });
+</script>
+
+

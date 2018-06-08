@@ -1,0 +1,5 @@
+D:\MyProjects\PreIRMA\PreIRMA.DAL\bin\Debug\PreIRMA.DAL.dll
+D:\MyProjects\PreIRMA\PreIRMA.DAL\bin\Debug\PreIRMA.DAL.pdb
+D:\MyProjects\PreIRMA\PreIRMA.DAL\obj\Debug\PreIRMA.DAL.csprojResolveAssemblyReference.cache
+D:\MyProjects\PreIRMA\PreIRMA.DAL\obj\Debug\PreIRMA.DAL.dll
+D:\MyProjects\PreIRMA\PreIRMA.DAL\obj\Debug\PreIRMA.DAL.pdb

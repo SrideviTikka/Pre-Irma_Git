@@ -1,0 +1,535 @@
+﻿@{
+    ViewBag.Title = "ViewUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="tabstrip" style="margin-top: 20px; margin-bottom: 50px; display: none">
+    <ul>
+        <li class="k-state-active" id="tab1">New Protocol</li>
+        <li id="tab2">Update Assessments</li>
+    </ul>
+    <div>
+        <div class="panel-heading col-md-12" style="background-color: #fafafa; margin: 10px 0;">
+            <h3 class="panel-title col-md-11" style="float: left; padding: 0; color: #79797a;">New Assessments >> View  </h3>
+            @*<a href="/RiskCriteria/AddRiskCriteria" class="btn btn-info btn-sm col-md-1" style="float: left; padding: 5px 0;">Add Users</a>*@
+            <button type="button" class="btn btn-info btn-sm" id="btnAddUsers" name="btnAddUsers">Add Clients</button>
+        </div>
+        <div style="">
+            <div id="divGrid" style="clear: both;"></div>
+        </div>
+    </div>
+    <div></div>
+</div>
+
+@*<div class="panel panel-default m-t-20" style="padding-top: 10px;">
+    <div class="panel-heading">
+        <h3 class="panel-title col-md-11">Users >> View </h3>
+        <button type="button" class="btn btn-info btn-sm" id="btnAddUsers" name="btnAddUsers">Add Users</button>
+    </div>
+    <div class="panel-body">
+        <div id="divGrid"></div>
+    </div>
+</div>*@
+
+<div id="addUsersModal" class="modal fade" role="dialog">
+
+    <div class="modal-dialog" style="width: 750px;">
+        <form id="frmAddUsers" action="~/User/AddUpdateUsers" method="post">
+            <input type="hidden" id="hdnUserId" name="hdnUserId" />
+            <input type="hidden" id="hdnActivetab1" name="hdnActivetab" value="1" />
+            <!-- Modal content-->
+            <div class="modal-content" style="width: 900px;">
+                <div class="modal-header col-md-12">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title col-md-3">Add/Edit Client</h4>
+                </div>
+
+                <div class="modal-body" style="padding: 0;">
+                    <div class="form-group col-md-12" style="padding-top: 20px;">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Assessment Types :</label>
+                        <div class="col-sm-8">
+                            <select id="ddlAssessmentType" name="ddlAssessmentType" required data-required-msg="Please select assessment types" data-placeholder=" --Select Assessment Types--"></select>
+                            <span class="k-invalid-msg" data-for="ddlAssessmentType" style="position: fixed"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="hidden" name="hdnClientName" id="hdnClientName" />
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Client Company Name :</label>
+                        <div class="col-sm-4">
+                            <select id="ddlClientName" name="ddlClientName" required data-required-msg="Please select client company name" tabindex="" class="fullWidth"></select>
+                        </div>
+                        <div class="col-sm-4" id="divNewClientName" style="display: none">
+                            <input type="text" name="txtNewClientName" id="txtNewClientName" class="form-control" placeholder="Enter Client Company Name" data-required-msg="Please enter client company name " pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" style="padding-top: 6px; display: none;" id="divClientNameABBR">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Client Company Name Abbr. :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtClientNameABBR" id="txtClientNameABBR" class="form-control" placeholder="Enter Client Name Abbr" data-required-msg="Please enter client company name abbr" maxlength="10" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="hidden" name="hdnSponserName" id="hdnSponserName" />
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Sponsor Company Name :</label>
+                        <div class="col-sm-4">
+                            <select id="ddlSponserName" name="ddlSponserName" required data-required-msg="Please select sponsor company name" tabindex="" class="fullWidth"></select>
+                        </div>
+                        <div class="col-sm-4" id="divNewSponserName" style="display: none">
+                            <input type="text" name="txtNewSponserName" id="txtNewSponserName" class="form-control" placeholder="Enter Sponsor Company Name" data-required-msg="Please enter sponsor company name" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" style="padding-top: 6px; display: none;" id="divSponserNameABBR">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Sponsor Company Name Abbr. :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtSponserNameABBR" id="txtSponserNameABBR" class="form-control" placeholder="Enter Sponsor Company Name Abbr" data-required-msg="Please enter sponsor company name abbr" maxlength="10" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        @*<input type="hidden" name="hdnProtocalName" id="hdnProtocalName" />*@
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Protocol Number :</label>
+                        @* <div class="col-sm-4">
+                            <select id="ddlProtocalName" name="ddlProtocalName" required data-required-msg="Please select Protocal Name" tabindex="" class="fullWidth"></select>
+                        </div>*@
+                        <div class="col-sm-8" id="divNewProtocalName">
+                            <input type="text" name="txtNewProtocalName" id="txtNewProtocalName" class="form-control" placeholder="Enter Protocol Number" required data-required-msg="Please enter protocol number" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" style="padding-top: 6px;" id="divProtocolNameABBR">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Protocol Number Abbr. :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtProtocolNameABBR" id="txtProtocolNameABBR" class="form-control" placeholder="Enter Protocol Number Abbr" data-required-msg="Please enter protocol number abbr" maxlength="10" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" style="padding-top: 6px;" id="divSponserApproval">                        
+                        <label class="control-label col-md-6" style="padding-top: 6px;">Does Sponsor Review/Approve monitor visit reports? : </label>
+                        <div class="col-md-4">
+                            <select id="ddlSponserApproval" name="ddlSponserApproval" class="fullWidth"  data-required-msg="Please select sponsor review"></select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">First Name :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtFirstName" id="txtFirstName" class="form-control" placeholder="Enter First Name" required data-required-msg="Please enter first name" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-sm-3" style="padding-top: 6px;">Last Name :</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="txtLastName" id="txtLastName" class="form-control" placeholder="Enter Last Name" required data-required-msg="Please enter last name" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" style="padding-top: 6px;">Email Address :</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="txtEmail" id="txtEmail" class="form-control" required data-required-msg="Please enter email address" placeholder="Enter Email Address" data-email-msg="Please enter valid email address" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" style="padding-top: 6px;">Database Lock Date :</label>
+                        <div class="col-sm-8">
+                            <input type="text" onkeydown="return false" autocomplete="off" name="txtExpiryDate" id="txtExpiryDate" required data-required-msg="Please select database lock date" placeholder="Select Database Lock Date" />
+                            <span class="k-invalid-msg" data-for="txtExpiryDate" style="position: fixed"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" name="btnSave" id="btnSave" value="Save" class="col-md-offset-1 btn btn-primary" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    if ("@TempData["hdnActivetab"]" == "2") {
+
+        $('#tab1').removeClass('k-state-active');
+        $('#tab2').addClass('k-state-active');
+    }
+    if ("@TempData["hdnActivetab"]" == "1") {
+
+        $('#tab1').addClass('k-state-active');
+        $('#tab2').removeClass('k-state-active');
+    }
+
+    //kendo validations here
+    $("#addUsersModal").on("show.bs.modal", function () {
+        $("#addUsersModal .k-tooltip-validation.k-invalid-msg").hide();
+    });
+    var validator = $("#frmAddUsers").kendoValidator().data("kendoValidator");
+    function GetAssessmentTypes() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAdminAssessmentTypes", "User")',
+            async: false,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function EditUsersData(UserId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetUsers", "User")',
+            data: { UserId: UserId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#addUsersModal').modal('show');
+                    $("#hdnUserId").val(data[0].UserId);
+                    $("#txtFirstName").val(data[0].FirstName).prop("readonly", true);
+                    $("#txtLastName").val(data[0].LastName).prop("readonly", true);
+                    $("#txtEmail").val(data[0].EmailAddress).prop("readonly", true);                 
+                    $("#txtExpiryDate").val(kendo.toString(kendo.parseDate(data[0].ExpiryDate), 'MM/dd/yyyy'));
+                    var vAssessmenTypeIds = [];
+                    var vAssessmenTypeIds = data[0].AssessmentType.split(",");
+                    $("#ddlAssessmentType").data("kendoMultiSelect").value(vAssessmenTypeIds);
+                    $("#ddlAssessmentType").data("kendoMultiSelect").readonly();
+                    $("#divNewClientName").hide();
+                    $("#divNewSponserName").hide();
+                    $("#divSponserNameABBR").hide();
+                    $("#divClientNameABBR").hide();
+                    $("#divProtocolNameABBR").hide();
+                    $("#ddlClientName").data("kendoDropDownList").text(data[0].ClientName);
+                    $("#ddlClientName").data("kendoDropDownList").readonly();
+                    $("#ddlSponserName").data("kendoDropDownList").text(data[0].SponserName);
+                    $("#ddlSponserName").data("kendoDropDownList").readonly();
+                    $("#txtNewProtocalName").val(data[0].ProtocalName).prop("readonly", true);                   
+                    if (data[0].SponsorApproval == "")
+                        $("#divSponserApproval").hide();
+                    else
+                    {
+                        $("#divSponserApproval").show();
+                        $("#ddlSponserApproval").data("kendoDropDownList").text(data[0].SponsorApproval);
+                        $("#ddlSponserApproval").data("kendoDropDownList").readonly();
+                    }
+                    $("#txtProtocolNameABBR").removeAttr('required');
+                    $("#divSponserNameABBR").removeAttr('required');
+                    $("#divClientNameABBR").removeAttr('required');
+                    $("#divNewClientName").removeAttr('required');
+                    $("#divNewSponserName").removeAttr('required');
+                    $("#ddlSponserApproval").removeAttr('required');
+                }
+            }
+        });
+    }
+
+    function DeleteUsers(UserId) {
+        if (UserId != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/User/DeleteUers?UserId=" + UserId;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetUsers();
+                        $('#divGrid').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+            }
+        }
+    }
+
+    function GetUsers() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetUsers", "User")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetClientDetails() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetClientDetails", "User")',
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+                result.push({ ClientName: "New", ClientDetailsId: 0 });
+            }
+        });
+        return result;
+    }
+
+    function GetSponserDetails(ClientDetailsId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSponserDetails", "User")',
+            data: { ClientDetailsId: ClientDetailsId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+                result.push({ SponserName: "New", SponserDetailsId: 0 });
+            }
+        });
+        return result;
+    }
+
+    function GetProtocolDetails(SponserDetailsId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetProtocolDetails", "User")',
+            data: { SponserDetailsId: SponserDetailsId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+                result.push({ ProtocalName: "New", ProtocalDetailsId: 0 });
+            }
+        });
+        return result;
+    }
+    $("#tab2").click(function () {
+        $('[name="ddlClientName"]').data("kendoDropDownList").value("");
+        $('[name="ddlClientName"]').trigger('change');
+        $('[name="ddlSponserName"]').data("kendoDropDownList").setDataSource([]);
+        $('[name="ddlSponserName"]').data("kendoDropDownList").value("");
+        $('[name="ddlSponserName"]').trigger('change');
+        if ($('[name="ddlProtocalName"]').data("kendoDropDownList") != "" && $('[name="ddlProtocalName"]').data("kendoDropDownList") != null) {
+            $('[name="ddlProtocalName"]').data("kendoDropDownList").setDataSource([]);
+            $('[name="ddlProtocalName"]').data("kendoDropDownList").value("");
+        }
+        $('#divGridAssesment').hide();
+        $("#divAddAssesment .k-tooltip-validation.k-invalid-msg").hide();
+    });
+
+    $("#tab1").click(function () {
+        var gridClients = GetUsers(0);
+        $('#divGrid').data("kendoGrid").dataSource.data(gridClients);
+    });
+
+    $("#btnAddUsers").click(function () {
+        $('#addUsersModal').modal('show');
+        $("#ddlAssessmentType").attr("required", "required")
+        $('#ddlAssessmentType').data('kendoMultiSelect').value("");
+        $("#ddlAssessmentType").data("kendoMultiSelect").readonly(false);
+        $('#txtFirstName').val("").attr("readonly", false);
+        $('#txtLastName').val("").attr("readonly", false);
+        $('#txtEmail').val("").attr("readonly", false);
+        $('#txtExpiryDate').val("");
+        $('#ddlClientName').data("kendoDropDownList").value("");
+        $("#ddlClientName").data("kendoDropDownList").enable(true);
+        $('#ddlClientName').trigger('change');
+        $("#ddlSponserName").data("kendoDropDownList").setDataSource([]);
+        $('#ddlSponserName').data("kendoDropDownList").value("");
+        $("#ddlSponserName").data("kendoDropDownList").enable(true);
+        $('#ddlSponserName').trigger('change');
+        $('#txtNewProtocalName').val("").attr("readonly", false);
+        $('#ddlSponserApproval').data("kendoDropDownList").value("");
+        $("#ddlSponserApproval").data("kendoDropDownList").enable(true);
+        $("#divNewClientName").hide();
+        $("#divNewSponserName").hide();
+        $("#divNewProtocalName").show();
+        $("#divProtocolNameABBR").show();
+        $('#txtNewClientName').val("");
+        $('#txtNewSponserName').val("");
+        $('#txtProtocolNameABBR').val("");
+        $("#txtProtocolNameABBR").attr('required', 'required');
+        $("#ddlSponserApproval").attr('required', 'required');
+    });
+    $(document).ready(function () {
+        $("#tabstrip").show();
+        $("#tabstrip").kendoTabStrip({
+            contentUrls: [
+           null,
+             "/User/ViewAssesments",
+            ]
+        });
+        var clientName = $("#ddlClientName").kendoDropDownList({
+            optionLabel: "--Select Client Company Name--",
+            dataTextField: "ClientName",
+            dataValueField: "ClientDetailsId",
+            dataSource: GetClientDetails()
+        }).data("kendoDropDownList");
+
+        var sponserName = $("#ddlSponserName").kendoDropDownList({
+            optionLabel: "--Select Sponsor Company Name--",
+            dataTextField: "SponserName",
+            dataValueField: "SponserDetailsId",
+            dataSource: []
+        }).data("kendoDropDownList");
+
+        var protocalName = $("#ddlProtocalName").kendoDropDownList({
+            optionLabel: "--Select Protocal Number--",
+            dataTextField: "ProtocalName",
+            dataValueField: "ProtocalDetailsId",
+            dataSource: []
+        }).data("kendoDropDownList");
+
+        var SponsorApproval = $("#ddlSponserApproval").kendoDropDownList({
+            dataSource: [
+                { SponsorApproval: "Yes", SponsorApprovalvalue: "Yes" },
+                { SponsorApproval: "No", SponsorApprovalvalue: "No" }
+            ],
+            dataTextField: "SponsorApproval",
+            dataValueField: "SponsorApprovalvalue",
+            optionLabel: "--Select Sponsor Review--"
+        });
+
+        $("#ddlClientName").change(function () {
+            $("#divNewSponserName").hide();
+            $("#divSponserNameABBR").hide();
+            if (clientName.text() == "New") {
+                $("#divNewClientName").show();
+                $('#txtNewClientName').val("");
+                $("#divClientNameABBR").show();
+                $('#txtClientNameABBR').val("");
+                $("#ddlSponserName").data("kendoDropDownList").setDataSource([]);
+                $("#ddlSponserName").data("kendoDropDownList").setDataSource([{ SponserName: "New", SponserDetailsId: 0 }]);
+                $("#txtNewClientName").attr('required', 'required');
+                $("#txtClientNameABBR").attr('required', 'required');
+            }
+            if (clientName.text() != "New" && $(this).data("kendoDropDownList").value() != null && $(this).data("kendoDropDownList").value()!="") {
+                var datasponser = GetSponserDetails($(this).data("kendoDropDownList").value());
+                $("#ddlSponserName").data("kendoDropDownList").setDataSource(datasponser);
+                $("#hdnClientName").val(clientName.text());
+                $("#divNewClientName").hide();
+                $("#divClientNameABBR").hide();           
+                $("#txtNewClientName").removeAttr('required');
+                $("#txtClientNameABBR").removeAttr('required');
+            }
+        });
+
+        $("#ddlSponserName").change(function () {
+            if (sponserName.text() == "New") {
+                $("#divNewSponserName").show();
+                $("#divSponserNameABBR").show();
+                $('#txtNewSponserName').val("");
+                $('#txtSponserNameABBR').val("");
+                $("#txtNewSponserName").attr('required', 'required');
+                $("#txtSponserNameABBR").attr('required', 'required');
+
+            }
+            if (sponserName.text() != "New") {
+                //var dataProtocol = GetProtocolDetails($(this).data("kendoDropDownList").value());
+                //$("#ddlProtocalName").data("kendoDropDownList").setDataSource(dataProtocol);
+                $("#hdnSponserName").val(sponserName.text());
+                $("#divNewSponserName").hide();
+                $("#divSponserNameABBR").hide();
+                $("#txtNewSponserName").removeAttr('required');
+                $("#txtSponserNameABBR").removeAttr('required');
+            }
+        });
+
+        //$("#ddlProtocalName").change(function () {
+        //    if (protocalName.text() == "New") {
+        //        $("#divNewProtocalName").show();
+        //        $("#divProtocolNameABBR").show();
+        //    }
+        //    if (protocalName.text() != "New") {
+        //        $("#hdnProtocalName").val(protocalName.text());
+        //        $("#divNewProtocalName").hide();
+        //        $("#divProtocolNameABBR").hide();
+        //    }
+        //});
+
+        var todayDate = new Date();
+        $("#ddlAssessmentType").kendoMultiSelect({
+            dataSource: GetAssessmentTypes(),
+            dataValueField: "AssessmentTpyeId",
+            dataTextField: "AssessmentType",
+            index: 0,
+            optionLabel: "--Select Assessment Type--",
+        });
+
+        $("#txtExpiryDate").kendoDatePicker({
+            //min: todayDate,
+            format: "MM/dd/yyyy"
+        });
+
+        var gridSections = $('#divGrid').kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: '@Url.Action("GetUsers", "User")'
+                },
+                pageSize: 10,
+                serverPaging: false,
+                serverFiltering: false,
+                serverSorting: false
+            },
+            sortable: true,
+            scrollable: false,
+            pageable: {
+                refresh: false,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            filterable: true,
+            columns:
+             [
+             {
+                 field: "UserId",
+                 hidden: true
+             },
+             {
+                 field: "FirstName",
+                 title: "First Name",
+                 width: 200
+             },
+             {
+                 field: "LastName",
+                 title: "Last Name",
+                 width: 300
+             },
+             {
+                 field: "EmailAddress",
+                 title: "Email Address",
+                 width: 300
+             },
+              {
+                  field: "ExpiryDate",
+                  title: "Expiry Date",
+                  template: "#= kendo.toString(kendo.parseDate(ExpiryDate), 'MM/dd/yyyy') #",
+                  width: 300
+              },
+              {
+                  field: "Status",
+                  title: "Status",
+                  width: 300
+              },
+             {
+                 template: "<div style='position: relative;left: 9px;'><a onClick='EditUsersData(#=UserId#)'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Edit'></i></a>&nbsp;&nbsp;&nbsp;</a></div>",
+                 title: "Action",
+                 width: 100
+             }
+             ]
+        });
+    });
+</script>

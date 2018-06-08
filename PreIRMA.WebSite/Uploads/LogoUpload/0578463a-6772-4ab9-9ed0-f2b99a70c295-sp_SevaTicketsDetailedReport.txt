@@ -1,0 +1,54 @@
+USE [SrisailamMIS]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_SevaTicketsDetailedReport]    Script Date: 07/04/2017 19:15:44 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[sp_SevaTicketsDetailedReport](
+	@DepartmentID INT,
+	@POSId INT,
+	@EmpId INT,
+	@Shift Varchar(10),
+	@FromDate Datetime,
+	@ToDate DateTime,
+	@SaleMode varchar(10)
+)
+AS
+BEGIN
+IF(@DepartmentID IS NULL AND @POSId IS NOT NULL)
+BEGIN
+	SET @DepartmentID = (SELECT DepartmentID FROM Counters WHERE DepartmentID=@DepartmentID)
+END
+IF(@SaleMode='OffLine')
+BEGIN
+	SELECT SevaTickets.SaleMode ,SevaTickets.PartyName, CONVERT(date, SevaTickets.SevaDate) AS SevaDate, POS.POSName, SevaTickets.ShiftNumber, SevaTickets.TicketNumber, Sevas.SevaName,SevaTickets.UnitPrice , SevaTickets.NoOfTickets, SevaTickets.TotalAmount, SevaTickets.TransactionID
+	FROM
+	SevaTickets 
+		JOIN POS ON SevaTickets.POSID = POS.POSID
+		JOIN Sevas ON SevaTickets.SevaID = Sevas.SevaId
+	WHERE
+		SevaTickets.SevaDate between COALESCE(@FromDate, SevaTickets.SevaDate) AND COALESCE(@ToDate, SevaTickets.SevaDate)  --'10-01-2016' AND '10-11-2016'
+		AND SevaTickets.POSID = COALESCE(@POSId, SevaTickets.POSID) 
+		AND SevaTickets.CreatedBy = COALESCE(@EmpId, SevaTickets.CreatedBy) 
+		AND SevaTickets.ShiftNumber = COALESCE(@Shift, SevaTickets.ShiftNumber) 
+		AND SevaTickets.DepartmentId = COALESCE(@DepartmentID, SevaTickets.DepartmentId) 
+		AND SevaTickets.SaleMode = @SaleMode
+END
+IF(@SaleMode='Online')
+BEGIN
+	SELECT SevaTickets.SaleMode ,SevaTickets.PartyName, CONVERT(date, SevaTickets.SevaDate) AS SevaDate,NULL AS POSName, SevaTickets.ShiftNumber, SevaTickets.TicketNumber, Sevas.SevaName,SevaTickets.UnitPrice , SevaTickets.NoOfTickets, SevaTickets.TotalAmount, SevaTickets.TransactionID
+	FROM
+	SevaTickets 
+		
+		JOIN Sevas ON SevaTickets.SevaID = Sevas.SevaId
+	WHERE
+		SevaTickets.SevaDate between COALESCE(@FromDate, SevaTickets.SevaDate) AND COALESCE(@ToDate, SevaTickets.SevaDate)  --'10-01-2016' AND '10-11-2016'
+		AND SevaTickets.SaleMode = @SaleMode
+END
+END

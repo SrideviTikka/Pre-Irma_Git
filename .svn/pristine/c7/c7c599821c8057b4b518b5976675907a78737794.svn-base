@@ -1,0 +1,493 @@
+﻿@using PreIRMA.DataContract;
+
+@{
+    ViewBag.Title = "ViewCapaDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DCUsers objDCUsers = (DCUsers)Session["UserLogon"];
+}
+
+<div class="panel panel-default m-t-20" style="padding-top: 10px;" id="ViewCapaDetails">
+    <input type="hidden" id="hdnSections" name="hdnSections" />
+    <input type="hidden" id="hdnRiskScore" name="hdnRiskScore" />
+    <div class="panel-heading col-md-12">
+        <h3 class="panel-title col-md-11" style="padding: 0;">CAPA Details >> View</h3>
+        <button type="button" id="btnAddCAPADetails" style="padding: 5px 0" class="btn btn-info btn-sm col-md-1">Add CAPADetails</button>
+    </div>
+
+    <!-- Dropdowns for Search start here -->
+
+    <div class="form-group col-md-12" style="padding-top: 15px;">
+        <label class="control-label col-md-3" style="padding-top: 6px;">Assessment Types :</label>
+        <div class="col-md-6">
+            <select id="ddlAssessmentTypes" name="ddlAssessmentTypes" required data-required-msg="Please select Assessment Type" class="fullWidth"></select>
+        </div>
+    </div>
+
+    <div class="form-group col-md-12">
+        <div class="form-group col-md-6">
+            <label class="control-label col-md-6" style="padding-top: 6px;">Sections :</label>
+            <div class="col-md-6">
+                <select id="ddlSection" name="ddlSection" class="fullWidth" required data-required-msg="Please select section"></select>
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label class="control-label col-md-3" style="padding-top: 6px;">Risk Score :</label>
+            <div class="col-md-6">
+                <select id="ddlRiskScore" name="ddlRiskScore" required data-required-msg="Please select risk score"></select>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Dropdowns for Search end here -->
+<div class="panel-body" style="padding: 140px 0 50px 0;">
+    <div id="divGrid"></div>
+</div>
+
+<!-- Modal -->
+<div id="addCAPADetails" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 95%;">
+        <!-- Modal Content-->
+        <form id="frmCAPADetails" action="~/CAPADetails/AddUpdateCAPADetails" method="post">
+
+            <input type="hidden" name="hdnCAPADetailsId" id="hdnCAPADetailsId" />
+            <input type="hidden" name="hdnSectionId" id="hdnSectionId" />
+            <input type="hidden" name="hdnRiskScoreId" id="hdnRiskScoreId" />
+            <input type="hidden" name="hdnAssessmentTypesId" id="hdnAssessmentTypesId" />
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4>Add CAPA Details</h4>
+                </div>
+                <div class="modal-body col-md-12">
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4">Assessment Type :</label>
+                        <div class="col-md-2">
+                            <label id="lblAssessmentType"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4">Sections :</label>
+                        <div class="col-md-7">
+                            <label id="lblSections"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4">Risk Score :</label>
+                        <div class="col-md-6">
+                            <label id="lblRiskScores"></label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">RiskCriteria :</label>
+                        <div class="col-md-8">
+                            <select id="ddlRiskCriteria" name="ddlRiskCriteria" class="fullWidth" required data-required-msg="Please select risk criteria"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Mitigation :</label>
+                        <div class="col-md-8">
+                            <select id="ddlMitigation" name="ddlMitigation" class="fullWidth" required data-required-msg="Please select mitigation" data-placeholder=" --Select Mitigation--"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">RiskCriteria Description :</label>
+                        <div class="col-md-8">
+                            <select id="ddlRiskCriteriaDescription" name="ddlRiskCriteriaDescription" class="fullWidth" required data-required-msg="Please select risk criteria description"></select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Impact :</label>
+                        <div class="col-md-8">
+                            <select id="ddlImpact" name="ddlImpact" class="fullWidth" required data-required-msg="Please select impact"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Confirmation Of Compliance Improvement :</label>
+                        <div class="col-md-8">
+                            <select id="ddlConfirmationOfComplianceImprovement" name="ddlConfirmationOfComplianceImprovement" class="fullWidth" required data-required-msg="Please select confirmation of compliance improvement"></select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info btn-sm" name="btnSave" id="btnSave">Save</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    /**Get Risk Criteria**/
+    function GetRiskCriteria() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaByAttributeType", "RiskCriteria")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetUserAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetUserAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetAdminAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetAdminAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    if ("@objDCUsers.UserType" == "A") {
+        var data = GetAdminAssessmentTypes();
+    }
+    else {
+        var data = GetUserAssessmentTypes();
+    }
+
+    var vDdlAssessmentTypess = $("#ddlAssessmentTypes").kendoDropDownList({
+        dataSource: data,
+        dataValueField: "AssessmentTpyeId",
+        dataTextField: "AssessmentType",
+        index: 0,
+        optionLabel: "--Select Assessment Types --",
+    }).data("kendoDropDownList");
+
+    // Risk Criteria Drop DownList
+    var vDdlSections = $("#ddlRiskCriteria").kendoDropDownList({
+        dataSource: GetRiskCriteria(),
+        dataValueField: "RiskCriteria",
+        dataTextField: "RiskCriteria",
+        index: 0,
+        optionLabel: "--Select Risk Criteria--",
+    }).data("kendoDropDownList");
+
+    function GetRiskCriteriaDetailsByRiskCriteria(RiskCriteria, Attribute) {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaDetailsByRiskCriteria", "RiskCriteria")',
+            data: { strRiskCriteria: RiskCriteria, strAttribute: Attribute },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    $("#ddlImpact").kendoDropDownList();
+    $("#ddlRiskCriteriaDescription").kendoDropDownList();
+    $("#ddlConfirmationOfComplianceImprovement").kendoDropDownList();
+
+    $("#ddlMitigation").kendoMultiSelect({
+        dataSource: [],
+        dataValueField: "RiskCriteriaId",
+        dataTextField: "DataValue",
+        index: 0,
+        optionLabel: "--Select Mitigation--",
+    }).data("kendoMultiSelect");
+
+    $("#ddlRiskCriteria").change(function () {
+
+
+        $("#ddlImpact").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "DataValue",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Impact--",
+        }).data("kendoDropDownList");
+
+        $("#ddlRiskCriteriaDescription").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "DataValue",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Risk Criteria Description--",
+        }).data("kendoDropDownList");
+
+        $("#ddlConfirmationOfComplianceImprovement").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "DataValue",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Confirmation Of Compliance Improvement--",
+        }).data("kendoDropDownList");
+
+        var dataImpact = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Impact");
+        $("#ddlImpact").data("kendoDropDownList").setDataSource(dataImpact);
+
+        var dataRiskCriteria = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Risk Criteria Description");
+        $("#ddlRiskCriteriaDescription").data("kendoDropDownList").setDataSource(dataRiskCriteria);
+
+        var dataConfirmationOfComplianceImprovement = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Confirmation Of Compliance Improvement");
+        $("#ddlConfirmationOfComplianceImprovement").data("kendoDropDownList").setDataSource(dataConfirmationOfComplianceImprovement);
+
+        var dataMitigation = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Mitigation");
+        $("#ddlMitigation").data("kendoMultiSelect").setDataSource(dataMitigation);
+        $("#ddlMitigation").data().kendoMultiSelect.value([]);
+    });
+
+    function GetSections(AssessmentTypeId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSections", "Sections")',
+            data: { strAssessmentTypeId: AssessmentTypeId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetCAPADetails(SectionId, RiskScoreId, AssessmentType) {
+
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetCAPADetails", "CAPADetails")',
+            data: { strSectionId: SectionId, strRiskScoreId: RiskScoreId, strAssessmentType: AssessmentType },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function EditCAPAData(CAPADetailsId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetCAPADetailsByCAPAId", "CAPADetails")',
+            data: { CAPADetailsId: CAPADetailsId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#addCAPADetails').modal('toggle');
+                    $("#hdnCAPADetailsId").val(data[0].CAPADetailsId);
+                    $("#ddlRiskCriteria").data('kendoDropDownList').text(data[0].RiskCriteria);
+                    $("#ddlRiskCriteria").trigger('change');
+                    $("#ddlRiskCriteriaDescription").data('kendoDropDownList').text(data[0].RiskCriteriaDescription);
+                    $("#ddlImpact").data('kendoDropDownList').text(data[0].Impact);
+                    var vMitigationIds = [];
+                    var vMitigationIds = data[0].Mitigation.split(",");
+                    $("#ddlMitigation").data("kendoMultiSelect").value(vMitigationIds);
+                    $("#ddlConfirmationOfComplianceImprovement").data("kendoDropDownList").text(data[0].ConfirmationOfComplianceImprovement);
+                    $("#lblAssessmentType").text($("#ddlAssessmentTypes").data('kendoDropDownList').text());
+                    $("#lblRiskScores").text($("#ddlRiskScore").data('kendoDropDownList').text());
+                    $("#lblAssessmentType").text($("#ddlAssessmentTypes").data('kendoDropDownList').text());
+                    $("#lblSections").text($("#ddlSection").data('kendoDropDownList').text());
+                }
+            }
+        });
+    }
+
+    function DeleteCAPADetails(CAPADetailsID) {
+        if (CAPADetailsID != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/CAPADetails/DeleteCAPADetails?CAPADetailsId=" + CAPADetailsID;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var SectionId = $("#ddlSection").val();
+                        var RiskScoreId = $("#ddlRiskScore").val();
+                        var AssessmentType = $("#ddlAssessmentTypes").val();
+                        var gridData = GetCAPADetails(SectionId, RiskScoreId, AssessmentType);
+                        $('#divGrid').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $("#idCapa").addClass('active');
+        var vDdlSections = $("#ddlSection").kendoDropDownList({
+            dataSource: GetSections(),
+            dataValueField: "SectionId",
+            dataTextField: "SectionName",
+            index: 0,
+            optionLabel: "--Select Sections--",
+        }).data("kendoDropDownList");
+
+        $("#ddlRiskScore").kendoDropDownList({
+            dataSource: [
+                { RiskScoreId: "0", RiskScoreText: "Risk Score 0" },
+                { RiskScoreId: "1", RiskScoreText: "Risk Score 1" },
+                { RiskScoreId: "2", RiskScoreText: "Risk Score 2" },
+                { RiskScoreId: "3", RiskScoreText: "Risk Score 3" },
+                { RiskScoreId: "4", RiskScoreText: "Risk Score 4" },
+                { RiskScoreId: "5", RiskScoreText: "Risk Score 5" }
+            ],
+            dataValueField: "RiskScoreId",
+            dataTextField: "RiskScoreText",
+            optionLabel: "--Select Risk--"
+        }).data("kendoDropDownList");
+
+        $("#ddlAssessmentTypes").change(function () {
+            var vAssessmentTypeId = $("#ddlAssessmentTypes").val();
+            $("#ddlSection").data("kendoDropDownList").setDataSource(GetSections(vAssessmentTypeId));
+        });
+
+        //Seva button click
+        var validator = $("#frmCAPADetails").kendoValidator().data("kendoValidator");
+
+        $("#addCAPADetails").on("show.bs.modal", function () {
+            $("#addCAPADetails .k-tooltip-validation.k-invalid-msg").hide();
+        });
+
+        $("#btnAddCAPADetails").click(function () {
+            $("#ddlSection").attr("required", "required");
+            $("#ddlRiskScore").attr("required", "required");
+            $("#ddlAssessmentTypes").attr("required", "required");
+            if (validator1.validate()) {
+                $('#addCAPADetails').modal('show');
+                $("#hdnSectionId").val($("#ddlSection").data('kendoDropDownList').value());
+                $("#hdnRiskScoreId").val($("#ddlRiskScore").data('kendoDropDownList').value());
+                $("#hdnAssessmentTypesId").val($("#ddlAssessmentTypes").data('kendoDropDownList').value());
+
+                $("#lblSections").text($("#ddlSection").data('kendoDropDownList').text());
+                $("#lblRiskScores").text($("#ddlRiskScore").data('kendoDropDownList').text());
+                $("#lblAssessmentType").text($("#ddlAssessmentTypes").data('kendoDropDownList').text());
+
+                $("#hdnCAPADetailsId").val("");
+
+                $("#ddlRiskCriteria").data('kendoDropDownList').value("");
+                $("#ddlMitigation").data('kendoMultiSelect').value("");
+                $("#ddlRiskCriteriaDescription").data('kendoDropDownList').value("");
+                $("#ddlImpact").data('kendoDropDownList').value("");
+                $("#ddlConfirmationOfComplianceImprovement").data('kendoDropDownList').value("");
+            }
+        });
+        var validator1 = $("#ViewCapaDetails").kendoValidator().data("kendoValidator");
+
+        //Section DropDown change function
+        $("#ddlSection").change(function () {
+            $("#ddlRiskScore").data("kendoDropDownList").text("--Select Risk--");
+            $("#divGrid").hide();
+        });
+
+        $("#ddlSection").change(function () {
+            $("#ddlRiskScore").data("kendoDropDownList").text("--Select Risk--");
+            $("#divGrid").hide();
+        });
+
+        //Get data grid based on search fields
+        $("#ddlRiskScore").change(function () {
+            var SectionId = $("#ddlSection").val();
+            var RiskScoreId = $("#ddlRiskScore").val();
+            var AssessmentType = $("#ddlAssessmentTypes").val();
+            if (validator1.validate()) {
+                var data = GetCAPADetails(SectionId, RiskScoreId, AssessmentType);
+
+                if (data.length > 0) {
+                    $("#divGrid").show();
+
+                    $("#divGrid").kendoGrid({
+                        dataSource: data,
+                        serverPaging: false,
+                        serverFiltering: false,
+                        serverSorting: false,
+                        pageable: {
+                            pageSize: 10,
+                            refresh: false,
+                            pageSizes: true,
+                            buttonCount: 5
+                        },
+                        filterable: true,
+                        columns:
+                         [
+                         {
+                             field: "CAPADetailsId",
+                             hidden: true
+                         },
+                         {
+                             field: "RiskCriteria",
+                             title: "Risk Criteria",
+                             width: 200
+                         },
+                         {
+                             field: "Impact",
+                             title: "Impact",
+                             width: 200
+                         },
+                         {
+                             field: "RiskCriteriaDescription",
+                             title: "Risk Criteria Description",
+                             width: 200
+                         },
+                         {
+                             field: "Mitigation",
+                             title: "Mitigation",
+                             width: 200
+                         },
+                         {
+                             template: "<div style='position: relative;left: 9px;'><a onClick='EditCAPAData(#=CAPADetailsId#)' style='cursor:pointer;'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Edit'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;</a><a onclick='DeleteCAPADetails(#=CAPADetailsId#)' style='cursor:pointer;' ><i class='fa fa-trash-o' aria-hidden='true' title='Delete'></i></a></div>",
+                             title: "Action",
+                             width: 100
+                         }
+                         ]
+                    });
+                }
+                else {
+                    $("#divGrid").hide();
+                }
+            }
+        });
+    });
+</script>
+
+
+

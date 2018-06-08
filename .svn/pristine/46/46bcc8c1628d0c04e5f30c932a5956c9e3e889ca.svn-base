@@ -1,0 +1,392 @@
+﻿@using PreIRMA.DataContract;
+@{
+    ViewBag.Title = "ViewSections";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DCUsers objDCUsers = (DCUsers)Session["UserLogon"];     
+}
+<div class="panel panel-default m-t-20" style="padding-top: 10px;" id="divAddSections">
+    <div class="panel-heading">
+        <h3 class="panel-title col-md-11">Sections >> View </h3>
+        <button type="button" class="btn btn-info btn-sm" id="btnAddSection" name="btnAddSection">Add Sections</button>
+    </div>
+    <div class="form-group" style="padding-bottom: 30px; padding-top: 15px;">
+        <label class="control-label col-md-3" style="padding-top: 6px;">Assessment Types :</label>
+        <div class="col-md-5">
+            <select id="ddlAssessmentTypes" name="ddlAssessmentTypes" required data-required-msg="Please select assessment type" class="fullWidth"></select>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div id="divGrid"></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addSection" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 700px;">
+        <form id="frmAddSections">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Section</h4>
+                </div>
+                <div class="modal-body col-md-12">
+                    <input type="hidden" name="hdnSectionId" id="hdnSectionId" />
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4">Assessment Type :</label>
+                        <div class="col-md-4">
+                            <label id="lblAssessmentType"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Section Number :</label>
+                        <div class="col-md-8">
+                            <input type="text" name="txtSectionNumber" id="txtSectionNumber" tabindex="1" class="form-control" required data-required-msg="Please enter section number" placeholder="Enter Section Number" maxlength="60" pattern="[a-zA-Z0-9\s._^%$#!~-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Section Name :</label>
+                        <div class="col-md-8">
+                            <input type="text" name="txtName" id="txtName" tabindex="2" class="form-control" required data-required-msg="Please enter section name" placeholder="Enter Section Name" pattern="[a-zA-Z0-9\s._^%$#!~/&*:=?\|,;`(){}-]+" validationmessage="Please enter valid input" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 " style="margin-bottom: 0;">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Description :</label>
+                        <div class="col-md-8">
+                            <textarea id="txtDescription" name="txtDescription" placeholder="Enter Description" required data-required-msg="Please enter description" tabindex="3"></textarea>
+                            <span class="k-invalid-msg" data-for="txtDescription"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" style="padding-top: 6px;" id="divCritical">
+                        <label class="control-label col-md-4" style="padding-top: 6px;">Critical : </label>
+                        <div class="col-md-4" style="padding-top: 7px;">
+                            <input type="checkbox" name="cbCritical" id="cbCritical" value="True">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" name="btnSave" id="btnSave" tabindex="3" style="text-align: center">Save</button>
+                    <button type="button" class="btn btn-default" tabindex="4" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    function GetUserAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetUserAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetAdminAssessmentTypes() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetAdminAssessmentTypes", "User")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    if ("@objDCUsers.UserType" == "A") {
+        var data = GetAdminAssessmentTypes();
+    }
+    else {
+        var data = GetUserAssessmentTypes();
+    }
+
+    var vDdlAssessmentTypess = $("#ddlAssessmentTypes").kendoDropDownList({
+        dataSource: data,
+        dataValueField: "AssessmentTpyeId",
+        dataTextField: "AssessmentType",
+        index: 0,
+        optionLabel: "--Select Assessment Types --",
+    }).data("kendoDropDownList");
+
+    function DeleteSections(SectionID) {
+        if (SectionID != '') {
+            if (confirm("Are you sure,Do you want to delete?")) {
+                var URL = "/Sections/DeleteSections?SectionID=" + SectionID;
+                $.post(URL, function (strMessage) {
+                    if (strMessage.trim() != "") {
+                        if (strMessage.toLowerCase().indexOf("success") != -1) {
+                            $('#spanSuccesMessage').text(strMessage);
+                            $("#divSuccesMessage").show();
+                            $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                        }
+                        else if (strMessage.toLowerCase().indexOf("unable") != -1) {
+                            $('#spanErrorMessage').text(strMessage);
+                            $("#divErrorMessage").show();
+                            $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                        }
+                        var gridData = GetSections($("#ddlAssessmentTypes").val());
+                        $('#divGrid').data("kendoGrid").dataSource.data(gridData);
+                    }
+                    else {
+                        $('#spanErrorMessage').text('Unable to delete, Please try after sometime');
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                })
+            }
+        }
+    }
+
+    //kendo validations here
+    var frmAddSectionsValidate = $("#frmAddSections").kendoValidator().data("kendoValidator");
+
+
+    $("#addSection").on("show.bs.modal", function () {
+        $("#addSection .k-tooltip-validation.k-invalid-msg").hide();
+    });
+
+
+
+    // This function is for save sections.
+    $("#btnSave").click(function () {
+        if (frmAddSectionsValidate.validate()) {
+            $.ajax({
+                async: false,
+                type: 'POST',
+                url: '@Url.Action("AddUpdateSections", "Sections")',
+                data: { strSectionName: $("#txtName").val(), hdnSectionId: $("#hdnSectionId").val(), strSectionNumber: $("#txtSectionNumber").val(), strAssessmentType: $("#ddlAssessmentTypes").val(), strDescription: $("#txtDescription").val(), strCritical: $("#cbCritical").is(':checked') ? "True" : "" },
+                success: function (response) {
+                    if (response.toLowerCase().indexOf("success") != -1) {
+                        $('#spanSuccesMessage').text(response);
+                        $("#divSuccesMessage").show();
+                        $('#divSuccesMessage').delay(3000).fadeOut('slow', function () { $('#spanSuccesMessage').text(""); });
+                    }
+                    else if (response.toLowerCase().indexOf("unable") != -1) {
+                        $('#spanErrorMessage').text(response);
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+                    else {
+                        $('#spanErrorMessage').text(response);
+                        $("#divErrorMessage").show();
+                        $('#divErrorMessage').delay(3000).fadeOut('slow', function () { $('#spanErrorMessage').text(""); });
+                    }
+
+                    $('#addSection').modal('toggle');
+                    $("#txtName").val("");
+                    $("#txtSectionNumber").val("");
+                    $("#hdnSectionId").val("");
+                    $("#txtDescription").val("");
+                    var gridData = GetSections($("#ddlAssessmentTypes").val());
+                    $('#divGrid').data('kendoGrid').dataSource.data(gridData);
+                }
+            });
+        }
+    });
+    function EditSectionData(SectionId) {
+
+        var result = null;
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSectionNameBySectionId", "Sections")',
+            data: { strSectionId: SectionId },
+            async: false,
+            traditional: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#addSection').modal('toggle');
+                    $("#hdnSectionId").val(SectionId);
+                    $("#txtName").val(data[0].SectionName);
+                    $("#txtSectionNumber").val(data[0].SectionNumber);
+                    $("#txtDescription").val(data[0].Description);
+                    if (data[0].Critical != '') {
+                        $('#cbCritical').val(data[0].Critical)
+                        $('#cbCritical').attr("checked", true);
+                    }
+                    else {
+                        $("#cbCritical").removeAttr("checked");
+                    }
+                    $("#lblAssessmentType").text($("#ddlAssessmentTypes").data('kendoDropDownList').text());
+                    vDdlAssessmentTypess.value(data[0].AssessmentTypeId);
+                    var descriptionText = data[0].Description;
+                    var decoded = $('<textarea />').html(descriptionText).text();
+                    $("#txtDescription").data("kendoEditor").value(decoded);
+                }
+            }
+        });
+    }
+
+    function GetSections(AssessmentId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("GetSections", "Sections")',
+            data: { strAssessmentTypeId: AssessmentId },
+            success: function (data) {
+                if (data.length > 1) {
+                    data.forEach(function (item, index, array) {
+                        if (index == 0) {
+                            data[index].viewUpButton = false;
+                            data[index].viewDownButton = true;
+                        }
+                        else if (index == array.length - 1) {
+                            data[index].viewUpButton = true;
+                            data[index].viewDownButton = false;
+                        }
+                        else {
+                            data[index].viewUpButton = true;
+                            data[index].viewDownButton = true;
+                        }
+                    });
+                }
+                else if (data.length == 1) {
+                    data[0].viewUpButton = false;
+                    data[0].viewDownButton = false;
+                }
+                result = data;
+            }
+        });
+
+        return result;
+    }
+
+    function SectionSortingBySortkey(SectionId, Arrow, AssessmentTypeId) {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("SectionSortingBySortkey", "Sections")',
+            data: { AssessmentTypeId: AssessmentTypeId, SectionId: SectionId, Arrow: Arrow },
+            success: function (data) {
+                //if(data[0].vi)
+                result = data;
+                var sortGridData = GetSections(AssessmentTypeId);
+                $('#divGrid').data("kendoGrid").dataSource.data(sortGridData);
+
+            }
+        });
+        return result;
+    }
+
+    $(document).ready(function () {
+
+        $("#idSections").addClass('active');
+       
+
+        $("#txtDescription").kendoEditor({
+            resizable: true,
+            tools: [{ name: "customTemplate", template: $("#editorTooltip-template").html() }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "justifyFull", "insertUnorderedList", "insertOrderedList", "indent", "outdent", "createLink", "unlink", "subscript", "superscript", "createTable", "addRowAbove", "addRowBelow", "addColumnLeft", "addColumnRight", "deleteRow", "deleteColumn", "formatting", "foreColor", "backColor"]
+        });
+
+        validator = $("#divAddSections").kendoValidator().data("kendoValidator");
+        $("#btnAddSection").click(function () {
+            $("#ddlAssessmentTypes").attr("required", "required")
+            if (validator.validate()) {
+                $("#lblAssessmentType").text($("#ddlAssessmentTypes").data('kendoDropDownList').text())
+                $('#addSection').modal('show');
+                $("#txtName").val("");
+                $("#txtSectionNumber").val("");
+                $("#txtDescription").data("kendoEditor").value("");
+                $("#hdnSectionId").val("");
+                $("#cbCritical").val("");
+                $("#cbCritical").removeAttr("checked");
+            }
+        });
+
+        $("#ddlAssessmentTypes").change(function () {
+            var gridData = GetSections($(this).val());
+            gridSections.data("kendoGrid").dataSource.data(gridData);
+            $("#divGrid").data("kendoGrid").dataSource.page(1);
+        });
+        var gridSections = $('#divGrid').kendoGrid({            
+            dataSource: [],      
+            serverPaging: false,
+            serverFiltering: false,
+            serverSorting: false,
+            sortable: true,
+            scrollable: false,
+            pageable: {               
+                pageSize: 10,
+                refresh: false,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            filterable: true,
+            columns:
+             [
+             {
+                 field: "SectionId",
+                 hidden: true
+             },
+             {
+                 field: "SectionNumber",
+                 title: "Section Number",
+                 width: 200
+             },
+             {
+                 field: "SectionName",
+                 title: "Section Name",
+                 width: 300
+             },
+              {
+                  field: "Description",
+                  encoded: false,
+                  title: "Description",
+                  template: "<div id='divDescription_#=SectionId#'></div>",
+                  width: 300
+              },
+               {
+                   field: "Critical",
+                   title: "Critical",
+                   width: 100
+               },
+             {
+                 template: "<div style='position: relative;left: 9px;'><a onClick='EditSectionData(#=SectionId#)' style='cursor:pointer;'><i class='fa fa-pencil-square-o' aria-hidden='true' title='Edit'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;</a><a onclick='DeleteSections(#=SectionId#)' style='cursor:pointer;' ><i class='fa fa-trash-o' aria-hidden='true' title='Delete'></i></a></div>",
+                 title: "Action",
+                 width: 100
+             },
+             {
+                 template: "<div style='position: relative;'>#if(viewUpButton==true){#<a onClick='SectionSortingBySortkey(#=SectionId#,\"UP\",#=AssessmentTypeId#)' style='cursor:pointer;'><i class='fa fa-arrow-circle-up' aria-hidden='true' title='MoveUp' style='position: absolute;left: 10px;'></i></a>#}#&nbsp;&nbsp;&nbsp;&nbsp;#if(viewDownButton==true){#<a onClick='SectionSortingBySortkey(#=SectionId#,\"DOWN\",#=AssessmentTypeId#)' style='cursor:pointer;'><i class='fa fa-arrow-circle-down' aria-hidden='true' title='MoveDown' style='position: absolute;right: 50px;'></i></a>#}#</div>",
+                 title: "Sort",
+                 width: 100
+             }
+             ],
+            dataBound: function () {
+                var data = this.dataSource.data();
+                data.forEach(function (item, index, array) {
+                    var vSectionId = item.SectionId;
+                    var vDescriptionDivId = "divDescription_" + vSectionId;
+                    $("#" + vDescriptionDivId).html($.parseHTML(item.Description)[0].data);
+                });
+            }
+        });
+    });
+</script>
+
+@*<script>
+    $(document).ready(function () {
+        var url = window.location.pathname,
+         urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+        $('.users a').each(function () {
+            if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
+                $(this).addClass('active');
+            }
+        });
+    });
+</script>
+<style>
+    .active {
+        background-color: #169dc9 !important;
+        color: white;
+    }
+</style>*@

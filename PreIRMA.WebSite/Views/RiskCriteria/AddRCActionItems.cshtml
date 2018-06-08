@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "AddRCActionItems";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddRCActionItems", "RiskCriteria", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddRCActionItems" }))
+{
+    <div class="col-md-12">
+        <div class="form-group col-md-12">
+            <input type="hidden" name="hdnSelectedTab" id="hdnSelectedTab" />
+            <input type="hidden" name="hdnRiskCriteria" id="hdnRiskCriteria" />
+            <div class="form-group col-md-12" style="padding-top: 50px;">
+                <label class="control-label col-md-3" style="padding: 0px;">Risk Criteria :</label>
+                <div class="col-md-6">
+                    <select id="ddlRiskCriteria" name="ddlRiskCriteria" class="fullWidth" data-required-msg="Please select risk criteria"></select>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label col-md-3" style="padding: 0px;">Risk Criteria Description :</label>
+                <div class="col-md-6">
+                    <select id="ddlRiskCriteriaDescription" name="ddlRiskCriteriaDescription" class="fullWidth" data-required-msg="Please select risk criteria description"></select>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label col-md-3" style="padding-top: 10px;">Action Items :</label>
+                <div class="col-md-6">
+                    <textarea id="txtActionItem" name="txtActionItem" class="form-control text-area" data-required-msg="Please enter action tem" maxlength="3000" placeholder="Enter Action Item"></textarea>
+                </div>
+            </div>
+            <div class="form-group  text-center">
+                <div class="col-sm-12 col-md-offset-7">
+                    <input type="submit" class="btn btn-info btn-md col-md-1" id="btnAddActionItem" name="btnAddActionItem" value="Save" style="margin-right: 20px;"/>
+                    <a href="/RiskCriteria/ViewRiskCriteria?activeTab=2" class="btn btn-default btn-md col-md-1">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+<style>
+    body {
+        overflow-x:hidden;
+    }
+</style>
+
+<script>
+
+   
+    //$("#btnAddActionItem").click(function () {
+    //    $("#ddlRiskCriteria").attr("required", "required");
+    //    $("#ddlRiskCriteriaDescription").attr("required", "required");
+    //    $("#txtActionItem").attr("required", "required");
+    //    if (validator.validate()) {
+    //        $("#ddlRiskCriteriaDescription").data("kendoDropDownList").text();
+    //        $("#hdnRiskCriteria").val($("#ddlRiskCriteria").data("kendoDropDownList").text());
+    //        $("#frmAddRCActionItems").submit();
+    //    }
+    //});
+
+    /**Get Risk Criteria**/
+    function GetRiskCriteria() {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaByAttributeType", "RiskCriteria")',
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    function GetRiskCriteriaDetailsByRiskCriteria(RiskCriteria, Attribute) {
+        var result = [];
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: '@Url.Action("GetRiskCriteriaDetailsByRiskCriteria", "RiskCriteria")',
+            data: { strRiskCriteria: RiskCriteria, strAttribute: Attribute },
+            success: function (data) {
+                result = data;
+            }
+        });
+        return result;
+    }
+    $("#ddlRiskCriteriaDescription").kendoDropDownList();
+    $("#ddlRiskCriteria").change(function () {
+
+        $("#ddlRiskCriteriaDescription").kendoDropDownList({
+            dataSource: [],
+            dataValueField: "DataValue",
+            dataTextField: "DataValue",
+            index: 0,
+            optionLabel: "--Select Risk Criteria Description--",
+        }).data("kendoDropDownList");
+
+        var dataRiskCriteria = GetRiskCriteriaDetailsByRiskCriteria($(this).data("kendoDropDownList").text(), "Risk Criteria Description");
+        $("#ddlRiskCriteriaDescription").data("kendoDropDownList").setDataSource(dataRiskCriteria);
+    });
+    $(document).ready(function () {
+        var validator = $("#frmAddRCActionItems").kendoValidator({
+            rules: {
+                customRule1: function (input) {                  
+                    if (input.is("[name=txtActionItem]")) {
+                        var reg = /[<,>]/g;
+                        return !reg.test($('[name="txtActionItem"]').val());                        
+                    }                   
+                    return true;
+                }
+            },
+            messages: {               
+                customRule1: "Please enter valid input",               
+            }             
+        }).data("kendoValidator");
+
+        $("#btnAddActionItem").click(function () {
+            $("#ddlRiskCriteria").attr("required", "required");
+            $("#ddlRiskCriteriaDescription").attr("required", "required");
+            $("#txtActionItem").attr("required", "required");
+            if (validator.validate()) {
+                $("#ddlRiskCriteriaDescription").data("kendoDropDownList").text();
+                $("#hdnRiskCriteria").val($("#ddlRiskCriteria").data("kendoDropDownList").text());
+                $("#frmAddRCActionItems").submit();
+            }
+        });
+
+        $("#riskCriteriaLink").addClass('active');
+        var vDdlSections = $("#ddlRiskCriteria").kendoDropDownList({
+            dataSource: GetRiskCriteria(),
+            dataValueField: "RiskCriteriaId",
+            dataTextField: "RiskCriteria",
+            index: 0,
+            optionLabel: "--Select Risk Criteria--",
+        }).data("kendoDropDownList");
+    });
+
+</script>

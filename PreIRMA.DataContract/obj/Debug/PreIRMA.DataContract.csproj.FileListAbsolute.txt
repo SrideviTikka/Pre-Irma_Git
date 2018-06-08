@@ -1,0 +1,5 @@
+D:\MyProjects\PreIRMA\PreIRMA.DataContract\bin\Debug\PreIRMA.DataContract.dll
+D:\MyProjects\PreIRMA\PreIRMA.DataContract\bin\Debug\PreIRMA.DataContract.pdb
+D:\MyProjects\PreIRMA\PreIRMA.DataContract\obj\Debug\PreIRMA.DataContract.csprojResolveAssemblyReference.cache
+D:\MyProjects\PreIRMA\PreIRMA.DataContract\obj\Debug\PreIRMA.DataContract.dll
+D:\MyProjects\PreIRMA\PreIRMA.DataContract\obj\Debug\PreIRMA.DataContract.pdb
